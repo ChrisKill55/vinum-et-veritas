@@ -1,0 +1,118 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model import_runs {
+  id             Int        @id @default(autoincrement())
+  source_type    String
+  source_file    String?
+  import_version String?
+  status         String
+  records_total  Int?
+  records_review Int?
+  started_at     DateTime   @default(now()) @db.Timestamp(6)
+  finished_at    DateTime?  @db.Timestamp(6)
+  ratings        ratings[]
+  tastings       tastings[]
+  wines          wines[]
+}
+
+model members {
+  id                 Int        @id @default(autoincrement())
+  first_name         String
+  last_initial       String?
+  display_name       String?
+  role_title         String?
+  avatar_description String?
+  is_active          Boolean    @default(true)
+  created_at         DateTime   @default(now()) @db.Timestamp(6)
+
+  email              String?    @unique
+  password_hash      String?
+  role               String     @default("MEMBER")
+
+  ratings            ratings[]
+  tastings           tastings[]
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model ratings {
+  id               Int          @id @default(autoincrement())
+  wine_id          Int
+  member_id        Int
+  color_score      Decimal?     @db.Decimal(3, 1)
+  smell_score      Decimal?     @db.Decimal(3, 1)
+  taste_score      Decimal?     @db.Decimal(3, 1)
+  finish_score     Decimal?     @db.Decimal(3, 1)
+  overall_score    Decimal?     @db.Decimal(3, 1)
+  calculated_score Decimal?     @db.Decimal(3, 1)
+  points_text      String?
+  review_flag      Boolean      @default(false)
+  review_reason    String?
+  source_import_id Int?
+  created_at       DateTime     @default(now()) @db.Timestamp(6)
+  members          members      @relation(fields: [member_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  import_runs      import_runs? @relation(fields: [source_import_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  wines            wines        @relation(fields: [wine_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@unique([wine_id, member_id], map: "ratings_unique_member_per_wine")
+  @@index([member_id], map: "idx_ratings_member")
+  @@index([wine_id], map: "idx_ratings_wine")
+}
+
+model review_items {
+  id          Int      @id @default(autoincrement())
+  entity_type String
+  entity_id   Int
+  reason      String?
+  status      String   @default("open")
+  created_at  DateTime @default(now()) @db.Timestamp(6)
+}
+
+model tastings {
+  id               Int          @id @default(autoincrement())
+  tasting_date     DateTime     @db.Date
+  host_member_id   Int
+  source_import_id Int?
+  created_at       DateTime     @default(now()) @db.Timestamp(6)
+  members          members      @relation(fields: [host_member_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  import_runs      import_runs? @relation(fields: [source_import_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  wines            wines[]
+
+  @@index([tasting_date], map: "idx_tastings_date")
+}
+
+model wines {
+  id                    Int          @id @default(autoincrement())
+  tasting_id            Int
+  sequence_no           Int
+  producer              String
+  wine_name             String
+  grape_variety         String?
+  vintage               Int?
+  country               String?
+  region                String?
+  alcohol_pct           Decimal?     @db.Decimal(4, 1)
+  price_eur             Decimal?     @db.Decimal(8, 2)
+  plv_text              String?
+  comment               String?
+  auto_filled_producer  Boolean      @default(false)
+  auto_filled_wine_name Boolean      @default(false)
+  review_flag           Boolean      @default(false)
+  review_reason         String?
+  source_import_id      Int?
+  created_at            DateTime     @default(now()) @db.Timestamp(6)
+  ratings               ratings[]
+  import_runs           import_runs? @relation(fields: [source_import_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  tastings              tastings     @relation(fields: [tasting_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@unique([tasting_id, sequence_no], map: "wines_unique_tasting_sequence")
+  @@index([country], map: "idx_wines_country")
+  @@index([tasting_id], map: "idx_wines_tasting")
+}
