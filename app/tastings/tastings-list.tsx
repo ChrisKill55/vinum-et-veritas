@@ -8,7 +8,6 @@ import ComicGallerySection from "@/app/components/ui/ComicGallerySection";
 type TastingListItem = {
   id: number;
   tasting_date: string;
-  notes: string | null;
   hostName: string;
   avatarDescription: string;
   avatarSrc: string;
@@ -165,16 +164,9 @@ export default function TastingsList({
                         </div>
                       </div>
 
-                      {tasting.notes ? (
-                        <p className="mt-5 max-w-3xl text-sm leading-7 text-neutral-700">
-                          {tasting.notes}
-                        </p>
-                      ) : (
-                        <p className="mt-5 max-w-3xl text-sm leading-7 text-neutral-500">
-                          Zu diesem Tasting sind aktuell keine zusätzlichen
-                          Notizen hinterlegt.
-                        </p>
-                      )}
+                     <p className="mt-5 max-w-3xl text-sm leading-7 text-neutral-500">
+                      Zu diesem Tasting sind aktuell keine zusätzlichen Informationen hinterlegt.
+                    </p> 
                     </div>
 
                     <div className="shrink-0">

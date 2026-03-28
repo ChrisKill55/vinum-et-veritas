@@ -31,7 +31,7 @@ export default async function CurrentReviewPage() {
 
       <Section>
         {!currentTasting ? (
-          <div className="comic-card comic-card-soft px-6 py-8">
+          <ComicCard className="relative overflow-hidden px-6 py-8">
             <div className="text-sm font-black uppercase tracking-[0.3em] text-red-700">
               Hinweis
             </div>
@@ -41,44 +41,35 @@ export default async function CurrentReviewPage() {
             <p className="mt-4 text-neutral-700">
               Es ist aktuell kein Tasting in der Datenbank vorhanden.
             </p>
-          </div>
+          </ComicCard>
         ) : (
           <>
             <SectionHeader
               kicker="Aktuelles Tasting"
-              title={`Gastgeber: ${
-                currentTasting.members?.display_name ?? "Unbekannt"
-              }`}
+              title={`Gastgeber: ${currentTasting.members?.display_name ?? "Unbekannt"}`}
             />
 
-            <ComicCard className="mb-10 relative overflow-hidden px-6 pb-8 pt-6">
-  <div className="text-sm font-black uppercase tracking-[0.2em] text-neutral-500">
-    Tasting-Datum
-  </div>
-  <div className="mt-2 text-2xl font-black uppercase">
-    {new Date(currentTasting.tasting_date).toLocaleDateString("de-DE")}
-  </div>
-
-  {currentTasting.notes && (
-    <>
-      <div className="mt-6 text-sm font-black uppercase tracking-[0.2em] text-neutral-500">
-        Notizen
-      </div>
-      <p className="mt-2 text-neutral-700">
-        {currentTasting.notes}
-      </p>
-    </>
-  )}
-</ComicCard>
+            <ComicCard className="relative mb-10 overflow-hidden px-6 py-6">
+              <div className="grid gap-6 md:grid-cols-1">
+                <div>
+                  <div className="text-sm font-black uppercase tracking-[0.2em] text-neutral-500">
+                    Tasting-Datum
+                  </div>
+                  <div className="mt-2 text-2xl font-black uppercase">
+                    {new Date(currentTasting.tasting_date).toLocaleDateString(
+                      "de-DE"
+                    )}
+                  </div>
+                </div>
+              </div>
+            </ComicCard>
 
             <div className="grid gap-6 lg:grid-cols-2">
               {currentTasting.wines.map((wine) => {
                 const wineTitle =
                   wine.producer === wine.wine_name
                     ? wine.wine_name
-                    : [wine.producer, wine.wine_name]
-                        .filter(Boolean)
-                        .join(" ");
+                    : [wine.producer, wine.wine_name].filter(Boolean).join(" ");
 
                 return (
                   <ComicCard

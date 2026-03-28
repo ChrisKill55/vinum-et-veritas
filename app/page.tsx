@@ -128,12 +128,16 @@ export default async function Page() {
     }),
   }));
 
-  const memberCards = members.map((member) => ({
-    name: member.display_name,
-    role: member.role_title,
-    accent: member.display_name.charAt(0).toUpperCase(),
-    avatar: avatarMap[member.display_name] ?? "/images/avatar-placeholder.jpg",
-  }));
+  const memberCards = members.map((member) => {
+  const displayName = member.display_name ?? "Unbekannt";
+
+  return {
+    name: displayName,
+    role: member.role_title ?? "Mitglied",
+    accent: displayName.charAt(0).toUpperCase(),
+    avatar: avatarMap[displayName] ?? "/images/avatar-placeholder.jpg",
+  };
+});
 
   const countryMap = new Map<string, number[]>();
 

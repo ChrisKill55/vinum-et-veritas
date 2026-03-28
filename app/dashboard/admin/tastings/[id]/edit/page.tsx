@@ -68,8 +68,7 @@ export default async function EditTastingPage({ params }: PageProps) {
   const initialTasting = {
     id: tasting.id,
     tasting_date: tasting.tasting_date.toISOString().slice(0, 10),
-    member_id: tasting.member_id,
-    notes: tasting.notes ?? "",
+    member_id: tasting.members?.id ?? 0,
     wines: tasting.wines.map((wine) => ({
       id: wine.id,
       sequence_no: wine.sequence_no,

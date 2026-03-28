@@ -32,16 +32,15 @@ export default async function TastingsPage() {
   });
 
   const initialTastings = tastingsRaw.map((tasting) => ({
-    id: tasting.id,
-    tasting_date: tasting.tasting_date.toISOString(),
-    notes: tasting.notes ?? null,
-    hostName: tasting.members?.display_name ?? "Unbekannt",
-    avatarDescription:
-      tasting.members?.avatar_description ??
-      `Avatar von ${tasting.members?.display_name ?? "Unbekannt"}`,
-    avatarSrc: getAvatarSrc(tasting.members?.display_name),
-    wineCount: tasting._count.wines,
-  }));
+  id: tasting.id,
+  tasting_date: tasting.tasting_date.toISOString(),
+  hostName: tasting.members?.display_name ?? "Unbekannt",
+  avatarDescription:
+    tasting.members?.avatar_description ??
+    `Avatar von ${tasting.members?.display_name ?? "Unbekannt"}`,
+  avatarSrc: getAvatarSrc(tasting.members?.display_name),
+  wineCount: tasting._count.wines,
+}));
 
   return (
     <div className="bg-white text-neutral-950">

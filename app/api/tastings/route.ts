@@ -20,11 +20,16 @@ export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
 
-    const skip = Number(searchParams.get("skip") ?? 0);
-    const take = Number(searchParams.get("take") ?? 12);
+    const skipParam = searchParams.get("skip");
+    const takeParam = searchParams.get("take");
+
+    const skip = Number(skipParam ?? 0);
+    const take = Number(takeParam ?? 12);
 
     const tastings = await prisma.tastings.findMany({
-      orderBy: { tasting_date: "desc" },
+      orderBy: {
+        tasting_date: "desc",
+      },
       skip,
       take,
       include: {
@@ -40,7 +45,6 @@ export async function GET(request: Request) {
     const items = tastings.map((tasting) => ({
       id: tasting.id,
       tasting_date: tasting.tasting_date.toISOString(),
-      notes: tasting.notes,
       hostName: tasting.members?.display_name ?? "Unbekannt",
       avatarDescription:
         tasting.members?.avatar_description ??
@@ -54,8 +58,12 @@ export async function GET(request: Request) {
     console.error("API /api/tastings Fehler:", error);
 
     return NextResponse.json(
-      { error: "Fehler beim Laden der Tastings." },
-      { status: 500 }
+      {
+        error: "Fehler beim Laden der Tastings.",
+      },
+      {
+        status: 500,
+      }
     );
   }
 }
