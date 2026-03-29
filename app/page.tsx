@@ -7,7 +7,8 @@ import ComicCard from "@/app/components/ui/ComicCard";
 import SectionAlt from "@/app/components/ui/SectionAlt";
 import ComicGallerySection from "@/app/components/ui/ComicGallerySection";
 import Link from "next/link";
-export const dynamic = "force-dynamic";
+
+export const revalidate = 300;
 export default async function Page() {
   const heroImage = "/images/hero-banner.webp";
 
