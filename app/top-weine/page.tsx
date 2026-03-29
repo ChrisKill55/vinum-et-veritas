@@ -56,30 +56,32 @@ export default async function TopWinesPage() {
           backgroundRepeat: "no-repeat, no-repeat",
         }}
       >
-        <div className="mb-14 max-w-3xl">
-        <div className="rounded-none border-2 border-black bg-white px-5 py-5 shadow-[4px_4px_0_#111] md:border-0 md:bg-transparent md:px-0 md:py-0 md:shadow-none">
-        <div className="text-[0.7rem] font-black uppercase tracking-[0.32em] text-red-700">
-        Hinweis des Weinclubs
-        </div>
+        <main className="px-6 py-20 pb-32">
+          <div className="mx-auto max-w-7xl">
+            <div className="mb-14 max-w-3xl">
+  <div className="rounded-none border-2 border-black bg-white px-5 py-5 shadow-[4px_4px_0_#111] md:border-0 md:bg-transparent md:px-0 md:py-0 md:shadow-none">
+    <div className="text-[0.7rem] font-black uppercase tracking-[0.32em] text-red-700">
+      Hinweis des Weinclubs
+    </div>
 
-        <div className="mt-4 md:max-w-2xl md:border-l-4 md:border-black md:pl-5">
-        <p className="text-sm leading-7 text-neutral-700 md:text-base md:leading-8">
+    <div className="mt-4 md:max-w-2xl md:border-l-4 md:border-black md:pl-5">
+      <p className="text-sm leading-7 text-neutral-700 md:text-base md:leading-8">
         Die hier dargestellten Bewertungen spiegeln ausschließlich die
         persönlichen Eindrücke der Mitglieder unseres Weinclubs wider.
         Geschmack ist subjektiv und hängt stark von Situation, Umgebung,
         Stimmung sowie der Kombination mit Speisen ab.
-        </p>
+      </p>
 
-        <p className="mt-4 text-sm leading-7 text-neutral-700 md:text-base md:leading-8">
+      <p className="mt-4 text-sm leading-7 text-neutral-700 md:text-base md:leading-8">
         Ein Wein kann unter anderen Bedingungen, in einer anderen Runde
         oder in Kombination mit anderen Speisen durchaus völlig anders
         wahrgenommen werden. Die Bewertungen verstehen sich daher
         ausdrücklich als persönliche Geschmackseindrücke und nicht als
         objektive Qualitätsurteile.
-        </p>
-        </div>
-        </div>
-      </div>
+      </p>
+    </div>
+  </div>
+</div>
 
             <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
               {winesWithAverage.map((wine, index) => {
