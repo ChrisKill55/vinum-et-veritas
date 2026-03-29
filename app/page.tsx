@@ -7,7 +7,7 @@ import ComicCard from "@/app/components/ui/ComicCard";
 import SectionAlt from "@/app/components/ui/SectionAlt";
 import ComicGallerySection from "@/app/components/ui/ComicGallerySection";
 import Link from "next/link";
-
+export const dynamic = "force-dynamic";
 export default async function Page() {
   const heroImage = "/images/hero-banner.webp";
 
@@ -75,45 +75,45 @@ export default async function Page() {
   ];
 
   const topWines = rankedWines
-    .map((wine) => {
-      const validScores = wine.ratings
-        .map((rating) =>
-          rating.calculated_score !== null
-            ? Number(rating.calculated_score)
-            : null
-        )
-        .filter(
-          (score): score is number => score !== null && !Number.isNaN(score)
-        );
+  .map((wine) => {
+    const validScores = wine.ratings
+      .map((rating) =>
+        rating.overall_score !== null
+          ? Number(rating.overall_score)
+          : null
+      )
+      .filter(
+        (score): score is number => score !== null && !Number.isNaN(score)
+      );
 
-      if (validScores.length === 0) {
-        return null;
-      }
+    if (validScores.length === 0) {
+      return null;
+    }
 
-      const average =
-        validScores.reduce((sum, score) => sum + score, 0) /
-        validScores.length;
+    const average =
+      validScores.reduce((sum, score) => sum + score, 0) /
+      validScores.length;
 
-      return {
-        name: wine.wine_name,
-        producer: wine.producer,
-        year: wine.vintage,
-        country: wine.country ?? "Unbekannt",
-        score: average.toFixed(2),
-        averageRaw: average,
-      };
-    })
-    .filter((wine): wine is NonNullable<typeof wine> => wine !== null)
-    .sort((a, b) => b.averageRaw - a.averageRaw)
-    .slice(0, 3)
-    .map((wine, index) => ({
-      rank: index + 1,
-      name: wine.name,
+    return {
+      name: wine.wine_name,
       producer: wine.producer,
-      year: wine.year,
-      country: wine.country,
-      score: wine.score,
-    }));
+      year: wine.vintage,
+      country: wine.country ?? "Unbekannt",
+      score: average.toFixed(1),
+      averageRaw: average,
+    };
+  })
+  .filter((wine): wine is NonNullable<typeof wine> => wine !== null)
+  .sort((a, b) => b.averageRaw - a.averageRaw)
+  .slice(0, 3)
+  .map((wine, index) => ({
+    rank: index + 1,
+    name: wine.name,
+    producer: wine.producer,
+    year: wine.year,
+    country: wine.country,
+    score: wine.score,
+  }));
 
   const tastings = recentTastings.map((t) => ({
     date: new Date(t.tasting_date).toLocaleDateString("de-DE"),

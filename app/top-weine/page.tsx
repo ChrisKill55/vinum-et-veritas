@@ -2,7 +2,7 @@ import { prisma } from "@/lib/prisma";
 import HeroSection from "@/app/components/ui/HeroSection";
 import WineGlassRating from "@/app/components/ui/WineGlassRating";
 import ComicCard from "@/app/components/ui/ComicCard";
-
+export const dynamic = "force-dynamic";
 export default async function TopWinesPage() {
   const wines = await prisma.wines.findMany({
     include: {

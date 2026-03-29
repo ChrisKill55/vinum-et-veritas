@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import HeroSection from "@/app/components/ui/HeroSection";
 import TastingsList from "./tastings-list";
-
+export const dynamic = "force-dynamic";
 function getAvatarSrc(displayName?: string | null) {
   const key = displayName?.trim().toLowerCase();
 

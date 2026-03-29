@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import WineGlassRating from "@/app/components/ui/WineGlassRating";
 import ComicCard from "@/app/components/ui/ComicCard";
-
+export const dynamic = "force-dynamic";
 export default async function TastingDetailPage({
   params,
 }: {
