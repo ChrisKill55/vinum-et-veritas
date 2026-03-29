@@ -59,7 +59,8 @@ export default async function TopWinesPage() {
         <main className="px-6 py-20 pb-32">
           <div className="mx-auto max-w-7xl">
             <div className="mb-14 max-w-3xl">
-  <div className="rounded-none border-2 border-black bg-white px-5 py-5 shadow-[4px_4px_0_#111] md:border-0 md:bg-transparent md:px-0 md:py-0 md:shadow-none">
+  <ComicCard className="px-6 pb-6 pt-6 md:bg-transparent md:shadow-none md:[&::before]:hidden md:[&::after]:hidden">
+    
     <div className="text-[0.7rem] font-black uppercase tracking-[0.32em] text-red-700">
       Hinweis des Weinclubs
     </div>
@@ -80,7 +81,8 @@ export default async function TopWinesPage() {
         objektive Qualitätsurteile.
       </p>
     </div>
-  </div>
+
+  </ComicCard>
 </div>
 
             <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
