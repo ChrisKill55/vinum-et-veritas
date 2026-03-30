@@ -2,6 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/auth";
+import { prisma } from "@/lib/prisma";
 import HeroSection from "@/app/components/ui/HeroSection";
 import Section from "@/app/components/ui/Section";
 import SectionHeader from "@/app/components/ui/SectionHeader";
@@ -14,7 +15,27 @@ export default async function DashboardPage() {
     redirect("/login");
   }
 
-  const memberName = session.user.name ?? "Clubmitglied";
+  const currentMember = await prisma.members.findUnique({
+    where: {
+      email: session.user.email,
+    },
+  });
+
+  if (!currentMember) {
+    redirect("/login");
+  }
+
+  const memberName = currentMember.display_name ?? session.user.name ?? "Clubmitglied";
+
+  const openRatingsCount = await prisma.ratings.count({
+    where: {
+      member_id: currentMember.id,
+      overall_score: null,
+    },
+  });
+
+  const role = String(currentMember.role ?? "").toUpperCase();
+  const isAdmin = role === "ADMIN" || role === "PRESIDENT";
 
   return (
     <div className="bg-white text-neutral-950">
@@ -67,6 +88,34 @@ export default async function DashboardPage() {
 
           <ComicCard className="relative overflow-hidden px-6 pb-12 pt-6">
             <div className="text-xs font-black uppercase tracking-[0.22em] text-red-700">
+              Offene Punkte
+            </div>
+
+            <h3 className="mt-3 text-2xl font-black uppercase leading-tight">
+              Meine offenen Bewertungen
+            </h3>
+
+            <div className="mt-5 text-5xl font-black text-black">
+              {openRatingsCount}
+            </div>
+
+            <p className="mt-5 text-sm leading-7 text-neutral-700">
+              Hier findest du alle Weine, bei denen deine Bewertung noch nicht
+              vollständig abgeschlossen ist.
+            </p>
+
+            <div className="mt-8">
+              <Link
+                href="/dashboard/offene-bewertungen"
+                className="inline-flex border-2 border-black bg-white px-4 py-3 text-sm font-black uppercase tracking-[0.2em] text-black transition hover:-translate-y-0.5"
+              >
+                Offene Bewertungen öffnen
+              </Link>
+            </div>
+          </ComicCard>
+
+          <ComicCard className="relative overflow-hidden px-6 pb-12 pt-6">
+            <div className="text-xs font-black uppercase tracking-[0.22em] text-red-700">
               Überblick
             </div>
 
@@ -112,29 +161,32 @@ export default async function DashboardPage() {
               </Link>
             </div>
           </ComicCard>
+
+          {isAdmin ? (
             <ComicCard className="relative overflow-hidden px-6 pb-12 pt-6">
-    <div className="text-xs font-black uppercase tracking-[0.22em] text-red-700">
-      Admin
-    </div>
+              <div className="text-xs font-black uppercase tracking-[0.22em] text-red-700">
+                Admin
+              </div>
 
-    <h3 className="mt-3 text-2xl font-black uppercase leading-tight">
-      Adminbereich
-    </h3>
+              <h3 className="mt-3 text-2xl font-black uppercase leading-tight">
+                Adminbereich
+              </h3>
 
-    <p className="mt-5 text-sm leading-7 text-neutral-700">
-      Öffne den Verwaltungsbereich für Tastings, Reviews und weitere interne
-      Funktionen des Weinclubs.
-    </p>
+              <p className="mt-5 text-sm leading-7 text-neutral-700">
+                Öffne den Verwaltungsbereich für Tastings, Reviews und weitere
+                interne Funktionen des Weinclubs.
+              </p>
 
-    <div className="mt-8">
-      <Link
-        href="/dashboard/admin"
-        className="inline-flex border-2 border-black bg-black px-4 py-3 text-sm font-black uppercase tracking-[0.2em] text-white transition hover:-translate-y-0.5"
-      >
-        Zum Adminbereich
-      </Link>
-    </div>
-  </ComicCard>
+              <div className="mt-8">
+                <Link
+                  href="/dashboard/admin"
+                  className="inline-flex border-2 border-black bg-black px-4 py-3 text-sm font-black uppercase tracking-[0.2em] text-white transition hover:-translate-y-0.5"
+                >
+                  Zum Adminbereich
+                </Link>
+              </div>
+            </ComicCard>
+          ) : null}
         </div>
       </Section>
     </div>
