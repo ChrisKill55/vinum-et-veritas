@@ -3,6 +3,7 @@
 import { useState } from "react";
 import ComicCard from "@/app/components/ui/ComicCard";
 import WineGlassRating from "@/app/components/ui/WineGlassRating";
+import Link from "next/link";
 
 type TopWineItem = {
   id: number;
@@ -141,51 +142,58 @@ export default function TopWinesList({ initialWines }: TopWinesListProps) {
               : [wine.producer, wine.wine_name].filter(Boolean).join(" ");
 
           return (
-            <ComicCard
-              key={wine.id}
-              className="relative overflow-hidden px-6 pb-12 pt-6"
-            >
-              <div className="flex items-center justify-between gap-4">
-                <div className="text-xs font-black uppercase tracking-[0.2em] text-red-700">
-                  Platz #{index + 1}
-                </div>
+         <Link
+  key={wine.id}
+  href={`/wines/${wine.id}`}
+  className="block h-full transition hover:-translate-y-1"
+>
+  <ComicCard className="relative flex h-full flex-col overflow-hidden px-6 pb-12 pt-6">
+    <div className="flex items-center justify-between gap-4">
+      <div className="text-xs font-black uppercase tracking-[0.2em] text-red-700">
+        Platz #{index + 1}
+      </div>
 
-                <div className="text-xs font-black uppercase tracking-[0.2em] text-neutral-500">
-                  {wine.ratingCount} Bewertung
-                  {wine.ratingCount === 1 ? "" : "en"}
-                </div>
-              </div>
+      <div className="text-xs font-black uppercase tracking-[0.2em] text-neutral-500">
+        {wine.ratingCount} Bewertung
+        {wine.ratingCount === 1 ? "" : "en"}
+      </div>
+    </div>
 
-              <h3 className="mt-3 break-words text-2xl font-black uppercase leading-tight">
-                {[wineLabel, wine.vintage].filter(Boolean).join(" ")}
-              </h3>
+    <h3 className="mt-3 break-words text-2xl font-black uppercase leading-tight">
+      {[wineLabel, wine.vintage].filter(Boolean).join(" ")}
+    </h3>
 
-              <div className="mt-4 text-sm text-neutral-600">
-                {wine.country || "Unbekannt"}
-              </div>
+    <div className="mt-4 text-sm text-neutral-600">
+      {wine.country || "Unbekannt"}
+    </div>
 
-              <div className="mt-6 border-t-2 border-black pt-5">
-                <div className="mb-3 flex flex-col gap-3">
-                  <WineGlassRating value={wine.average ?? 0} />
+    <div className="mt-6 border-t-2 border-black pt-5">
+      <div className="mb-3 flex flex-col gap-3">
+        <WineGlassRating value={wine.average ?? 0} />
 
-                  <div className="text-lg font-black">
-                    {wine.average?.toFixed(1)} / 10
-                  </div>
-                </div>
-              </div>
+        <div className="text-lg font-black">
+          {wine.average?.toFixed(1)} / 10
+        </div>
+      </div>
+    </div>
 
-              {wine.comment ? (
-                <div className="mt-6 border-t-2 border-black pt-5">
-                  <div className="mb-2 text-xs font-black uppercase tracking-[0.2em] text-neutral-500">
-                    Gruppenstatement
-                  </div>
+    <div className="mt-6 flex-1 border-t-2 border-black pt-5">
+      <div className="mb-2 text-xs font-black uppercase tracking-[0.2em] text-neutral-500">
+        Gruppenstatement
+      </div>
 
-                  <p className="text-sm leading-7 text-neutral-700">
-                    {wine.comment}
-                  </p>
-                </div>
-              ) : null}
-            </ComicCard>
+      {wine.comment ? (
+        <p className="line-clamp-4 text-sm leading-7 text-neutral-700">
+          {wine.comment}
+        </p>
+      ) : (
+        <p className="text-sm leading-7 text-neutral-400">
+          Kein Gruppenstatement vorhanden.
+        </p>
+      )}
+    </div>
+  </ComicCard>
+</Link>
           );
         })}
       </div>

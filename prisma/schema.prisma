@@ -24,21 +24,22 @@ model import_runs {
 }
 
 model members {
-  id                 Int        @id @default(autoincrement())
+  id                 Int      @id @default(autoincrement())
   first_name         String
   last_initial       String?
   display_name       String?
   role_title         String?
   avatar_description String?
-  is_active          Boolean    @default(true)
-  created_at         DateTime   @default(now()) @db.Timestamp(6)
+  is_active          Boolean  @default(true)
+  created_at         DateTime @default(now()) @db.Timestamp(6)
 
-  email              String?    @unique
-  password_hash      String?
-  role               String     @default("MEMBER")
+  email         String? @unique
+  password_hash String?
+  role          String  @default("MEMBER")
 
-  ratings            ratings[]
-  tastings           tastings[]
+  ratings     ratings[]
+  tastings    tastings[]
+  wine_images wine_images[]
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
@@ -89,30 +90,52 @@ model tastings {
 }
 
 model wines {
-  id                    Int          @id @default(autoincrement())
-  tasting_id            Int
-  sequence_no           Int
-  producer              String
-  wine_name             String
-  grape_variety         String?
-  vintage               Int?
-  country               String?
-  region                String?
-  alcohol_pct           Decimal?     @db.Decimal(4, 1)
-  price_eur             Decimal?     @db.Decimal(8, 2)
-  plv_text              String?
-  comment               String?
-  auto_filled_producer  Boolean      @default(false)
-  auto_filled_wine_name Boolean      @default(false)
-  review_flag           Boolean      @default(false)
+  id            Int      @id @default(autoincrement())
+  tasting_id    Int
+  sequence_no   Int
+  producer      String
+  wine_name     String
+  grape_variety String?
+  vintage       Int?
+  country       String?
+  region        String?
+  alcohol_pct   Decimal? @db.Decimal(4, 1)
+  price_eur     Decimal? @db.Decimal(8, 2)
+  plv_text      String?
+  comment       String?
+
+  purchase_location String?
+  purchase_note     String?
+
+  auto_filled_producer  Boolean  @default(false)
+  auto_filled_wine_name Boolean  @default(false)
+  review_flag           Boolean  @default(false)
   review_reason         String?
   source_import_id      Int?
-  created_at            DateTime     @default(now()) @db.Timestamp(6)
-  ratings               ratings[]
-  import_runs           import_runs? @relation(fields: [source_import_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  tastings              tastings     @relation(fields: [tasting_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  created_at            DateTime @default(now()) @db.Timestamp(6)
+
+  ratings     ratings[]
+  wine_images wine_images[]
+
+  import_runs import_runs? @relation(fields: [source_import_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  tastings    tastings     @relation(fields: [tasting_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
   @@unique([tasting_id, sequence_no], map: "wines_unique_tasting_sequence")
   @@index([country], map: "idx_wines_country")
   @@index([tasting_id], map: "idx_wines_tasting")
+}
+
+model wine_images {
+  id         Int      @id @default(autoincrement())
+  wine_id    Int
+  member_id  Int
+  image_url  String
+  is_primary Boolean  @default(false)
+  created_at DateTime @default(now())
+
+  wines   wines   @relation(fields: [wine_id], references: [id], onDelete: Cascade)
+  members members @relation(fields: [member_id], references: [id], onDelete: Cascade)
+
+  @@index([wine_id])
+  @@index([member_id])
 }

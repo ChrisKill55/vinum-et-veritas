@@ -148,97 +148,102 @@ export default async function TastingDetailPage({
                     : [wine.producer, wine.wine_name].filter(Boolean).join(" ");
 
                 return (
-                  <ComicCard
-                    key={wine.id}
-                    className="relative overflow-hidden px-6 pb-12 pt-6"
-                  >
-                    <div className="text-xs font-black uppercase tracking-[0.22em] text-red-700">
-                      Flight #{wine.sequence_no}
-                    </div>
+                  <Link
+  key={wine.id}
+  href={`/wines/${wine.id}`}
+  className="block h-full outline-none transition hover:-translate-y-1 focus-visible:-translate-y-1"
+>
+  <ComicCard
+    className="relative h-full overflow-hidden px-6 pb-12 pt-6"
+  >
+    <div className="text-xs font-black uppercase tracking-[0.22em] text-red-700">
+      Flight #{wine.sequence_no}
+    </div>
 
-                    <h3 className="mt-3 break-words text-2xl font-black uppercase leading-tight">
-                      {[wineLabel, wine.vintage].filter(Boolean).join(" ")}
-                    </h3>
+    <h3 className="mt-3 break-words text-2xl font-black uppercase leading-tight">
+      {[wineLabel, wine.vintage].filter(Boolean).join(" ")}
+    </h3>
 
-                    <div className="mt-4 grid grid-cols-[1fr_auto] gap-6">
-                      <div className="space-y-2 text-sm leading-6 text-neutral-700">
-                        <p>
-                          <span className="font-black uppercase text-black">
-                            Land:
-                          </span>{" "}
-                          {wine.country || "Unbekannt"}
-                        </p>
+    <div className="mt-4 grid grid-cols-[1fr_auto] gap-6">
+      <div className="space-y-2 text-sm leading-6 text-neutral-700">
+        <p>
+          <span className="font-black uppercase text-black">
+            Land:
+          </span>{" "}
+          {wine.country || "Unbekannt"}
+        </p>
 
-                        <p>
-                          <span className="font-black uppercase text-black">
-                            Region:
-                          </span>{" "}
-                          {wine.region || "Unbekannt"}
-                        </p>
+        <p>
+          <span className="font-black uppercase text-black">
+            Region:
+          </span>{" "}
+          {wine.region || "Unbekannt"}
+        </p>
 
-                        <p>
-                          <span className="font-black uppercase text-black">
-                            Rebsorte:
-                          </span>{" "}
-                          {wine.grape_variety || "Unbekannt"}
-                        </p>
+        <p>
+          <span className="font-black uppercase text-black">
+            Rebsorte:
+          </span>{" "}
+          {wine.grape_variety || "Unbekannt"}
+        </p>
 
-                        <p>
-                          <span className="font-black uppercase text-black">
-                            Alkohol:
-                          </span>{" "}
-                          {wine.alcohol_pct
-                            ? `${wine.alcohol_pct}%`
-                            : "Unbekannt"}
-                        </p>
+        <p>
+          <span className="font-black uppercase text-black">
+            Alkohol:
+          </span>{" "}
+          {wine.alcohol_pct
+            ? `${wine.alcohol_pct}%`
+            : "Unbekannt"}
+        </p>
 
-                        <p>
-                          <span className="font-black uppercase text-black">
-                            Preis:
-                          </span>{" "}
-                          {wine.price_eur
-                            ? `${wine.price_eur} €`
-                            : "Unbekannt"}
-                        </p>
-                      </div>
+        <p>
+          <span className="font-black uppercase text-black">
+            Preis:
+          </span>{" "}
+          {wine.price_eur
+            ? `${wine.price_eur} €`
+            : "Unbekannt"}
+        </p>
+      </div>
 
-                      {isWinner && (
-                        <div className="flex justify-end">
-                          <img
-                            src="/images/wein-des-abends.svg"
-                            alt="Wein des Abends"
-                            className="mt-10 w-32 opacity-95"
-                          />
-                        </div>
-                      )}
-                    </div>
+      {isWinner && (
+        <div className="flex justify-end">
+          <img
+            src="/images/wein-des-abends.svg"
+            alt="Wein des Abends"
+            className="mt-10 w-32 opacity-95"
+          />
+        </div>
+      )}
+    </div>
 
-                    {wine.averageOverall !== null ? (
-                      <div className="mt-5 border-t-2 border-black pt-4">
-                        <div className="mb-2 text-xs font-black uppercase tracking-[0.2em] text-neutral-500">
-                          Durchschnitt
-                        </div>
+    {wine.averageOverall !== null ? (
+      <div className="mt-5 border-t-2 border-black pt-4">
+        <div className="mb-2 text-xs font-black uppercase tracking-[0.2em] text-neutral-500">
+          Durchschnitt
+        </div>
 
-                        <div className="flex flex-col gap-3">
-                          <WineGlassRating value={wine.averageOverall} />
-                          <div className="text-lg font-black">
-                            {wine.averageOverall.toFixed(1)} / 10
-                          </div>
-                        </div>
-                      </div>
-                    ) : null}
+        <div className="flex flex-col gap-3">
+          <WineGlassRating value={wine.averageOverall} />
+          <div className="text-lg font-black">
+            {wine.averageOverall.toFixed(1)} / 10
+          </div>
+        </div>
+      </div>
+    ) : null}
 
-                    {wine.comment ? (
-                      <div className="mt-5 border-t-2 border-black pt-4">
-                        <div className="mb-2 text-xs font-black uppercase tracking-[0.2em] text-neutral-500">
-                          Kommentar
-                        </div>
-                        <p className="text-sm leading-7 text-neutral-700">
-                          {wine.comment}
-                        </p>
-                      </div>
-                    ) : null}
-                  </ComicCard>
+    {wine.comment ? (
+      <div className="mt-5 border-t-2 border-black pt-4">
+        <div className="mb-2 text-xs font-black uppercase tracking-[0.2em] text-neutral-500">
+          Kommentar
+        </div>
+        <p className="text-sm leading-7 text-neutral-700">
+          {wine.comment}
+        </p>
+      </div>
+    ) : null}
+  </ComicCard>
+</Link>
                 );
               })}
             </div>

@@ -96,25 +96,27 @@ export default async function Page() {
       validScores.length;
 
     return {
-      name: wine.wine_name,
-      producer: wine.producer,
-      year: wine.vintage,
-      country: wine.country ?? "Unbekannt",
-      score: average.toFixed(1),
-      averageRaw: average,
-    };
+  id: wine.id,
+  name: wine.wine_name,
+  producer: wine.producer,
+  year: wine.vintage,
+  country: wine.country ?? "Unbekannt",
+  score: average.toFixed(1),
+  averageRaw: average,
+};
   })
   .filter((wine): wine is NonNullable<typeof wine> => wine !== null)
   .sort((a, b) => b.averageRaw - a.averageRaw)
   .slice(0, 3)
   .map((wine, index) => ({
-    rank: index + 1,
-    name: wine.name,
-    producer: wine.producer,
-    year: wine.year,
-    country: wine.country,
-    score: wine.score,
-  }));
+  id: wine.id,
+  rank: index + 1,
+  name: wine.name,
+  producer: wine.producer,
+  year: wine.year,
+  country: wine.country,
+  score: wine.score,
+}));
 
   const tastings = recentTastings.map((t) => ({
     date: new Date(t.tasting_date).toLocaleDateString("de-DE"),
@@ -241,47 +243,50 @@ export default async function Page() {
 
             <div className="grid gap-6 lg:grid-cols-3">
               {topWines.map((wine) => (
-                <ComicCard
-                  key={wine.rank}
-                  className="relative overflow-hidden px-6 pb-12 pt-6"
-                >
-                  <div className="comic-badge mb-5 px-4 py-2 text-xs font-black uppercase tracking-[0.28em]">
-                    Platz {wine.rank}
-                  </div>
+                <Link
+  key={wine.id}
+  href={`/wines/${wine.id}`}
+  className="block h-full outline-none transition hover:-translate-y-1 focus-visible:-translate-y-1"
+>
+  <ComicCard className="relative h-full overflow-hidden px-6 pb-12 pt-6">
+    <div className="comic-badge mb-5 px-4 py-2 text-xs font-black uppercase tracking-[0.28em]">
+      Platz {wine.rank}
+    </div>
 
-                  <h3 className="text-3xl font-black uppercase leading-tight tracking-tight">
-                    {wine.name}
-                  </h3>
+    <h3 className="text-3xl font-black uppercase leading-tight tracking-tight">
+      {wine.name}
+    </h3>
 
-                  <p className="mt-4 text-base font-semibold text-neutral-600">
-                    {wine.producer}
-                  </p>
+    <p className="mt-4 text-base font-semibold text-neutral-600">
+      {wine.producer}
+    </p>
 
-                  <div className="mt-8 grid grid-cols-2 gap-3 text-sm uppercase tracking-widest text-neutral-600">
-                    <div>
-                      <div>Jahrgang</div>
-                      <div className="mt-2 text-lg font-black text-black">
-                        {wine.year}
-                      </div>
-                    </div>
-                    <div>
-                      <div>Land</div>
-                      <div className="mt-2 text-lg font-black text-black">
-                        {wine.country}
-                      </div>
-                    </div>
-                  </div>
+    <div className="mt-8 grid grid-cols-2 gap-3 text-sm uppercase tracking-widest text-neutral-600">
+      <div>
+        <div>Jahrgang</div>
+        <div className="mt-2 text-lg font-black text-black">
+          {wine.year}
+        </div>
+      </div>
+      <div>
+        <div>Land</div>
+        <div className="mt-2 text-lg font-black text-black">
+          {wine.country}
+        </div>
+      </div>
+    </div>
 
-                  <div className="mt-8 border-t-2 border-black pt-5">
-                    <div className="text-xs uppercase tracking-widest text-neutral-500">
-                      Durchschnitt
-                    </div>
+    <div className="mt-8 border-t-2 border-black pt-5">
+      <div className="text-xs uppercase tracking-widest text-neutral-500">
+        Durchschnitt
+      </div>
 
-                    <div className="mt-2 text-5xl font-black text-red-700">
-                      {wine.score}
-                    </div>
-                  </div>
-                </ComicCard>
+      <div className="mt-2 text-5xl font-black text-red-700">
+        {wine.score}
+      </div>
+    </div>
+  </ComicCard>
+</Link>
               ))}
             </div>
           </Section>
