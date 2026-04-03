@@ -163,12 +163,11 @@ export default function WineImageUploadForm({ wineId }: Props) {
           </button>
 
           <input
-            ref={inputRef}
-            type="file"
-            accept="image/*"
-            capture="environment"
-            onChange={onSelectFile}
-            className="hidden"
+          ref={inputRef}
+          type="file"
+          accept="image/*"
+          onChange={onSelectFile}
+          className="hidden"
           />
         </div>
 
