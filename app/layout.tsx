@@ -1,9 +1,9 @@
 import "./globals.css";
-import Navbar from "@/app/components/ui/Navbar";
 import { Bebas_Neue, Inter } from "next/font/google";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Providers from "./providers";
+import InstallPrompt from "@/app/components/ui/install-prompt";
 
 const bebas = Bebas_Neue({
   weight: "400",
@@ -19,6 +19,11 @@ const inter = Inter({
 export const metadata = {
   title: "Vinum et Veritas – Weinclub",
   description: "Sechs Freunde. Viel Rotwein. Ehrliche Urteile.",
+  icons: {
+    icon: "/icons/icon-192.png",
+    apple: "/icons/apple-touch-icon.png",
+  },
+  manifest: "/manifest.json",
 };
 
 export default function RootLayout({
@@ -29,14 +34,15 @@ export default function RootLayout({
   return (
     <html lang="de">
       <body
-  className={`${bebas.variable} ${inter.variable} antialiased min-h-screen flex flex-col bg-white text-neutral-950`}
->
-  <Providers>
-    <Header />
-    <main className="flex-1">{children}</main>
-    <Footer />
-  </Providers>
-</body>
+        className={`${bebas.variable} ${inter.variable} min-h-screen bg-white text-neutral-950 antialiased flex flex-col`}
+      >
+        <Providers>
+          <Header />
+          <main className="flex-1">{children}</main>
+          <Footer />
+          <InstallPrompt />
+        </Providers>
+      </body>
     </html>
   );
 }
