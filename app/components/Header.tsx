@@ -10,7 +10,7 @@ export default function Header() {
   const { data: session, status } = useSession();
   const [menuOpen, setMenuOpen] = useState(false);
 
-  const logo = "/images/logo-vinum-et-veritas.svg";
+  const logo = "/images/logo-vinum-et-veritas-long.svg";
   const isLoggedIn = status === "authenticated";
   const userInitial =
   session?.user?.name?.charAt(0).toUpperCase() ?? "M";
@@ -49,7 +49,7 @@ export default function Header() {
           </div>
         </Link>
 
-        <nav className="hidden items-center gap-8 md:flex">
+        <nav className="hidden items-center gap-8 lg:flex">
           {navItems.map((item) => {
             const isActive = pathname === item.href;
 
@@ -97,7 +97,7 @@ export default function Header() {
           aria-label={menuOpen ? "Menü schließen" : "Menü öffnen"}
           aria-expanded={menuOpen}
           onClick={toggleMenu}
-          className="relative flex h-12 w-12 items-center justify-center border-2 border-black bg-white shadow-[3px_3px_0_#111] transition hover:-translate-y-0.5 md:hidden"
+          className="relative flex h-12 w-12 items-center justify-center border-2 border-black bg-white shadow-[3px_3px_0_#111] transition hover:-translate-y-0.5 lg:hidden"
         >
           <span className="relative h-6 w-6">
             <span
@@ -120,7 +120,7 @@ export default function Header() {
       </div>
 
       <div
-        className={`overflow-hidden border-t-2 border-black bg-white transition-all duration-300 md:hidden ${
+        className={`overflow-hidden border-t-2 border-black bg-white transition-all duration-300 lg:hidden ${
           menuOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
         }`}
       >
