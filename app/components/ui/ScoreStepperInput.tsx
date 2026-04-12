@@ -1,12 +1,14 @@
 "use client";
 
-type WineGlassInputProps = {
+type ScoreStepperInputProps = {
+  id: string;
   name: string;
   value: string;
   onChange: (value: string) => void;
+  placeholder?: string;
 };
 
-function parseWineValue(value: string): number | null {
+function parseScore(value: string): number | null {
   const normalized = value.trim().replace(",", ".");
 
   if (!normalized) {
@@ -22,24 +24,34 @@ function parseWineValue(value: string): number | null {
   return parsed;
 }
 
-function formatWineValue(value: number): string {
+function formatScore(value: number): string {
   return value.toFixed(1).replace(/\.0$/, "");
 }
 
-export default function WineGlassInput({
+export default function ScoreStepperInput({
+  id,
   name,
   value,
   onChange,
-}: WineGlassInputProps) {
+  placeholder = "0–10",
+}: ScoreStepperInputProps) {
+  function stepDown() {
+    const current = parseScore(value) ?? 0;
+    const next = Math.max(0, current - 0.5);
+    onChange(formatScore(next));
+  }
+
+  function stepUp() {
+    const current = parseScore(value) ?? 0;
+    const next = Math.min(10, current + 0.5);
+    onChange(formatScore(next));
+  }
+
   return (
     <div className="flex items-center gap-3">
       <button
         type="button"
-        onClick={() => {
-          const current = parseWineValue(value) ?? 0;
-          const next = Math.max(0, current - 0.5);
-          onChange(formatWineValue(next));
-        }}
+        onClick={stepDown}
         className="border-2 border-black bg-white px-4 py-3 text-lg font-black leading-none text-black transition hover:-translate-y-0.5 hover:bg-neutral-200"
         aria-label={`${name} verringern`}
       >
@@ -47,26 +59,20 @@ export default function WineGlassInput({
       </button>
 
       <input
+        id={id}
         name={name}
-        type="number"
-        min="0"
-        max="10"
-        step="0.5"
+        type="text"
         inputMode="decimal"
         value={value}
         onChange={(event) => onChange(event.target.value)}
         className="w-full border-2 border-black bg-white px-4 py-3 text-center text-base font-black focus:outline-none"
-        placeholder="0 bis 10 (0,5 Schritte)"
+        placeholder={placeholder}
         required
       />
 
       <button
         type="button"
-        onClick={() => {
-          const current = parseWineValue(value) ?? 0;
-          const next = Math.min(10, current + 0.5);
-          onChange(formatWineValue(next));
-        }}
+        onClick={stepUp}
         className="border-2 border-black bg-black px-4 py-3 text-lg font-black leading-none text-white transition hover:-translate-y-0.5 hover:bg-red-700"
         aria-label={`${name} erhöhen`}
       >

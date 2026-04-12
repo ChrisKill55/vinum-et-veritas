@@ -8,6 +8,7 @@ import Section from "@/app/components/ui/Section";
 import SectionHeader from "@/app/components/ui/SectionHeader";
 import WineGlassInput from "@/app/components/ui/WineGlassInput";
 import ComicCard from "@/app/components/ui/ComicCard";
+import ReviewForm from "./review-form";
 
 type PageProps = {
   params: Promise<{
@@ -61,23 +62,31 @@ export default async function CurrentWineReviewPage({ params }: PageProps) {
     }
 
     const wineId = Number(formData.get("wineId"));
-    const color = Number(formData.get("color"));
-    const smell = Number(formData.get("smell"));
-    const taste = Number(formData.get("taste"));
-    const finish = Number(formData.get("finish"));
-    const overall = Number(formData.get("overall"));
-    const comment = String(formData.get("comment") ?? "");
 
-    if (
-      Number.isNaN(wineId) ||
-      Number.isNaN(color) ||
-      Number.isNaN(smell) ||
-      Number.isNaN(taste) ||
-      Number.isNaN(finish) ||
-      Number.isNaN(overall)
-    ) {
-      throw new Error("Ungültige Bewertungsdaten.");
-    }
+function parseScore(value: FormDataEntryValue | null): number {
+  const normalized = String(value ?? "")
+    .trim()
+    .replace(",", ".");
+
+  const parsed = Number(normalized);
+
+  if (Number.isNaN(parsed)) {
+    throw new Error("Ungültige Bewertungsdaten.");
+  }
+
+  return parsed;
+}
+
+const color = parseScore(formData.get("color"));
+const smell = parseScore(formData.get("smell"));
+const taste = parseScore(formData.get("taste"));
+const finish = parseScore(formData.get("finish"));
+const overall = parseScore(formData.get("overall"));
+const comment = String(formData.get("comment") ?? "");
+
+    if (Number.isNaN(wineId)) {
+  throw new Error("Ungültige Bewertungsdaten.");
+}
 
     const existingAllowedRating = await prisma.ratings.findFirst({
       where: {
@@ -281,144 +290,17 @@ export default async function CurrentWineReviewPage({ params }: PageProps) {
               Bewertung erfassen
             </h2>
           </div>
-
-          <form action={saveRating} className="space-y-6">
-            <input type="hidden" name="wineId" value={String(wine.id)} />
-
-            <div className="grid gap-6 md:grid-cols-2">
-              <div>
-                <label
-                  htmlFor="color"
-                  className="mb-2 block text-sm font-black uppercase tracking-[0.2em]"
-                >
-                  Farbe / Optik
-                </label>
-                <input
-                  id="color"
-                  name="color"
-                  type="number"
-                  min="0"
-                  max="10"
-                  step="0.5"
-                  defaultValue={colorDefault}
-                  className="w-full border-2 border-black bg-white px-4 py-3 text-base focus:outline-none"
-                  placeholder="0 bis 10"
-                  required
-                />
-              </div>
-
-              <div>
-                <label
-                  htmlFor="smell"
-                  className="mb-2 block text-sm font-black uppercase tracking-[0.2em]"
-                >
-                  Nase
-                </label>
-                <input
-                  id="smell"
-                  name="smell"
-                  type="number"
-                  min="0"
-                  max="10"
-                  step="0.5"
-                  defaultValue={smellDefault}
-                  className="w-full border-2 border-black bg-white px-4 py-3 text-base focus:outline-none"
-                  placeholder="0 bis 10"
-                  required
-                />
-              </div>
-
-              <div>
-                <label
-                  htmlFor="taste"
-                  className="mb-2 block text-sm font-black uppercase tracking-[0.2em]"
-                >
-                  Geschmack
-                </label>
-                <input
-                  id="taste"
-                  name="taste"
-                  type="number"
-                  min="0"
-                  max="10"
-                  step="0.5"
-                  defaultValue={tasteDefault}
-                  className="w-full border-2 border-black bg-white px-4 py-3 text-base focus:outline-none"
-                  placeholder="0 bis 10"
-                  required
-                />
-              </div>
-
-              <div>
-                <label
-                  htmlFor="finish"
-                  className="mb-2 block text-sm font-black uppercase tracking-[0.2em]"
-                >
-                  Abgang
-                </label>
-                <input
-                  id="finish"
-                  name="finish"
-                  type="number"
-                  min="0"
-                  max="10"
-                  step="0.5"
-                  defaultValue={finishDefault}
-                  className="w-full border-2 border-black bg-white px-4 py-3 text-base focus:outline-none"
-                  placeholder="0 bis 10"
-                  required
-                />
-              </div>
-
-              <div className="md:col-span-2">
-                <label className="mb-2 block text-sm font-black uppercase tracking-[0.2em]">
-                  Gesamteindruck
-                </label>
-
-                <WineGlassInput
-                  name="overall"
-                  defaultValue={overallDefault}
-                />
-              </div>
-            </div>
-
-            <div>
-              <label
-                htmlFor="comment"
-                className="mb-2 block text-sm font-black uppercase tracking-[0.2em]"
-              >
-                Kommentar
-              </label>
-              <textarea
-                id="comment"
-                name="comment"
-                rows={5}
-                defaultValue={commentDefault}
-                className="w-full border-2 border-black bg-white px-4 py-3 text-base focus:outline-none"
-                placeholder="Dein Eindruck zum Wein ..."
-              />
-            </div>
-
-            {calculatedDefault !== null && (
-              <div className="border-t-2 border-black pt-4">
-                <div className="text-sm font-black uppercase tracking-[0.2em] text-neutral-500">
-                  Bisherige Durchschnittswertung
-                </div>
-                <div className="mt-2 text-2xl font-black uppercase">
-                  {calculatedDefault}
-                </div>
-              </div>
-            )}
-
-            <div className="pt-2">
-              <button
-                type="submit"
-                className="border-2 border-black bg-black px-6 py-3 text-sm font-black uppercase tracking-[0.2em] text-white transition hover:-translate-y-0.5"
-              >
-                Bewertung speichern
-              </button>
-            </div>
-          </form>
+        <ReviewForm
+  action={saveRating}
+  wineId={wine.id}
+  colorDefault={colorDefault}
+  smellDefault={smellDefault}
+  tasteDefault={tasteDefault}
+  finishDefault={finishDefault}
+  overallDefault={overallDefault}
+  commentDefault={commentDefault}
+  calculatedDefault={calculatedDefault}
+/>
         </ComicCard>
       </Section>
     </div>

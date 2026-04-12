@@ -141,60 +141,66 @@ export default function TopWinesList({ initialWines }: TopWinesListProps) {
               ? wine.wine_name
               : [wine.producer, wine.wine_name].filter(Boolean).join(" ");
 
-          return (
-         <Link
-  key={wine.id}
-  href={`/wines/${wine.id}`}
-  className="block h-full transition hover:-translate-y-1"
->
-  <ComicCard className="relative flex h-full flex-col overflow-hidden px-6 pb-12 pt-6">
-    <div className="flex items-center justify-between gap-4">
-      <div className="text-xs font-black uppercase tracking-[0.2em] text-red-700">
-        Platz #{index + 1}
-      </div>
+         return (
+  <Link
+    key={wine.id}
+    href={`/wines/${wine.id}`}
+    className="block h-full cursor-pointer transition hover:-translate-y-1"
+  >
+    <ComicCard className="relative flex h-full flex-col overflow-hidden px-6 pb-12 pt-6">
+      <div className="flex items-center justify-between gap-4">
+        <div className="text-xs font-black uppercase tracking-[0.2em] text-red-700">
+          Platz #{index + 1}
+        </div>
 
-      <div className="text-xs font-black uppercase tracking-[0.2em] text-neutral-500">
-        {wine.ratingCount} Bewertung
-        {wine.ratingCount === 1 ? "" : "en"}
-      </div>
-    </div>
-
-    <h3 className="mt-3 break-words text-2xl font-black uppercase leading-tight">
-      {[wineLabel, wine.vintage].filter(Boolean).join(" ")}
-    </h3>
-
-    <div className="mt-4 text-sm text-neutral-600">
-      {wine.country || "Unbekannt"}
-    </div>
-
-    <div className="mt-6 border-t-2 border-black pt-5">
-      <div className="mb-3 flex flex-col gap-3">
-        <WineGlassRating value={wine.average ?? 0} />
-
-        <div className="text-lg font-black">
-          {wine.average?.toFixed(1)} / 10
+        <div className="text-xs font-black uppercase tracking-[0.2em] text-neutral-500">
+          {wine.ratingCount} Bewertung
+          {wine.ratingCount === 1 ? "" : "en"}
         </div>
       </div>
-    </div>
 
-    <div className="mt-6 flex-1 border-t-2 border-black pt-5">
-      <div className="mb-2 text-xs font-black uppercase tracking-[0.2em] text-neutral-500">
-        Gruppenstatement
+      <h3 className="mt-3 break-words text-2xl font-black uppercase leading-tight">
+        {[wineLabel, wine.vintage].filter(Boolean).join(" ")}
+      </h3>
+
+      <div className="mt-4 text-sm text-neutral-600">
+        {wine.country || "Unbekannt"}
       </div>
 
-      {wine.comment ? (
-        <p className="line-clamp-4 text-sm leading-7 text-neutral-700">
-          {wine.comment}
-        </p>
-      ) : (
-        <p className="text-sm leading-7 text-neutral-400">
-          Kein Gruppenstatement vorhanden.
-        </p>
-      )}
-    </div>
-  </ComicCard>
-</Link>
-          );
+      <div className="mt-6 border-t-2 border-black pt-5">
+        <div className="mb-3 flex flex-col gap-3">
+          <WineGlassRating value={wine.average ?? 0} />
+
+          <div className="text-lg font-black">
+            {wine.average?.toFixed(1)} / 10
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-6 flex-1 border-t-2 border-black pt-5">
+        <div className="mb-2 text-xs font-black uppercase tracking-[0.2em] text-neutral-500">
+          Gruppenstatement
+        </div>
+
+        {wine.comment ? (
+          <p className="line-clamp-4 text-sm leading-7 text-neutral-700">
+            {wine.comment}
+          </p>
+        ) : (
+          <p className="text-sm leading-7 text-neutral-400">
+            Kein Gruppenstatement vorhanden.
+          </p>
+        )}
+      </div>
+
+      <div className="mt-8">
+        <span className="inline-flex border-2 border-black bg-black px-4 py-3 text-sm font-black uppercase tracking-[0.2em] text-white transition-all hover:-translate-y-0.5 hover:bg-red-700">
+  Wein-Details
+</span>
+      </div>
+    </ComicCard>
+  </Link>
+); 
         })}
       </div>
 

@@ -148,14 +148,13 @@ export default async function TastingDetailPage({
                     : [wine.producer, wine.wine_name].filter(Boolean).join(" ");
 
                 return (
-                  <Link
+                <Link
   key={wine.id}
   href={`/wines/${wine.id}`}
-  className="block h-full outline-none transition hover:-translate-y-1 focus-visible:-translate-y-1"
+  className="block h-full cursor-pointer outline-none transition hover:-translate-y-1 focus-visible:-translate-y-1"
 >
-  <ComicCard
-    className="relative h-full overflow-hidden px-6 pb-12 pt-6"
-  >
+  <ComicCard className="relative flex h-full flex-col overflow-hidden px-6 pb-12 pt-6">
+
     <div className="text-xs font-black uppercase tracking-[0.22em] text-red-700">
       Flight #{wine.sequence_no}
     </div>
@@ -167,42 +166,28 @@ export default async function TastingDetailPage({
     <div className="mt-4 grid grid-cols-[1fr_auto] gap-6">
       <div className="space-y-2 text-sm leading-6 text-neutral-700">
         <p>
-          <span className="font-black uppercase text-black">
-            Land:
-          </span>{" "}
+          <span className="font-black uppercase text-black">Land:</span>{" "}
           {wine.country || "Unbekannt"}
         </p>
 
         <p>
-          <span className="font-black uppercase text-black">
-            Region:
-          </span>{" "}
+          <span className="font-black uppercase text-black">Region:</span>{" "}
           {wine.region || "Unbekannt"}
         </p>
 
         <p>
-          <span className="font-black uppercase text-black">
-            Rebsorte:
-          </span>{" "}
+          <span className="font-black uppercase text-black">Rebsorte:</span>{" "}
           {wine.grape_variety || "Unbekannt"}
         </p>
 
         <p>
-          <span className="font-black uppercase text-black">
-            Alkohol:
-          </span>{" "}
-          {wine.alcohol_pct
-            ? `${wine.alcohol_pct}%`
-            : "Unbekannt"}
+          <span className="font-black uppercase text-black">Alkohol:</span>{" "}
+          {wine.alcohol_pct ? `${wine.alcohol_pct}%` : "Unbekannt"}
         </p>
 
         <p>
-          <span className="font-black uppercase text-black">
-            Preis:
-          </span>{" "}
-          {wine.price_eur
-            ? `${wine.price_eur} €`
-            : "Unbekannt"}
+          <span className="font-black uppercase text-black">Preis:</span>{" "}
+          {wine.price_eur ? `${wine.price_eur} €` : "Unbekannt"}
         </p>
       </div>
 
@@ -217,7 +202,7 @@ export default async function TastingDetailPage({
       )}
     </div>
 
-    {wine.averageOverall !== null ? (
+    {wine.averageOverall !== null && (
       <div className="mt-5 border-t-2 border-black pt-4">
         <div className="mb-2 text-xs font-black uppercase tracking-[0.2em] text-neutral-500">
           Durchschnitt
@@ -230,10 +215,10 @@ export default async function TastingDetailPage({
           </div>
         </div>
       </div>
-    ) : null}
+    )}
 
-    {wine.comment ? (
-      <div className="mt-5 border-t-2 border-black pt-4">
+    {wine.comment && (
+      <div className="mt-5 flex-1 border-t-2 border-black pt-4">
         <div className="mb-2 text-xs font-black uppercase tracking-[0.2em] text-neutral-500">
           Kommentar
         </div>
@@ -241,7 +226,15 @@ export default async function TastingDetailPage({
           {wine.comment}
         </p>
       </div>
-    ) : null}
+    )}
+
+    {/* BUTTON */}
+    <div className="mt-8">
+      <span className="inline-flex border-2 border-black bg-black px-4 py-3 text-sm font-black uppercase tracking-[0.2em] text-white transition-all hover:-translate-y-0.5 hover:bg-red-700">
+  Wein-Details
+</span>
+    </div>
+
   </ComicCard>
 </Link>
                 );

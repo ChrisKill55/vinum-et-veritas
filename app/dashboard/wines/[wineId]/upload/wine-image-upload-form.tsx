@@ -102,44 +102,60 @@ export default function WineImageUploadForm({ wineId }: Props) {
     });
   }
 
-  async function handleUpload() {
-    if (!file || !imageSrc || !croppedAreaPixels) {
-      setError("Bitte wähle ein Bild und einen Ausschnitt aus.");
-      return;
-    }
-
-    try {
-      setLoading(true);
-      setError(null);
-
-      const croppedBlob = await createCroppedBlob();
-      const uploadFile = new File([croppedBlob], `wine-${wineId}.jpg`, {
-        type: "image/jpeg",
-      });
-
-      const formData = new FormData();
-      formData.append("file", uploadFile);
-      formData.append("wineId", String(wineId));
-
-      const response = await fetch("/api/wine-images/upload", {
-        method: "POST",
-        body: formData,
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data?.error ?? "Upload fehlgeschlagen.");
-      }
-
-      router.push(`/wines/${wineId}`);
-      router.refresh();
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Upload fehlgeschlagen.");
-    } finally {
-      setLoading(false);
-    }
+  async function createCroppedBlob(): Promise<Blob> {
+  if (!imageSrc || !croppedAreaPixels) {
+    throw new Error("Kein Bildausschnitt vorhanden.");
   }
+
+  const image = await new Promise<HTMLImageElement>((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => resolve(img);
+    img.onerror = reject;
+    img.src = imageSrc;
+  });
+
+  const canvas = document.createElement("canvas");
+  const ctx = canvas.getContext("2d");
+
+  if (!ctx) {
+    throw new Error("Canvas konnte nicht initialisiert werden.");
+  }
+
+  const targetWidth = 1200;
+  const targetHeight = 1500;
+
+  canvas.width = targetWidth;
+  canvas.height = targetHeight;
+
+  ctx.imageSmoothingEnabled = true;
+  ctx.imageSmoothingQuality = "high";
+
+  ctx.drawImage(
+    image,
+    croppedAreaPixels.x,
+    croppedAreaPixels.y,
+    croppedAreaPixels.width,
+    croppedAreaPixels.height,
+    0,
+    0,
+    targetWidth,
+    targetHeight
+  );
+
+  return await new Promise<Blob>((resolve, reject) => {
+    canvas.toBlob(
+      (blob) => {
+        if (!blob) {
+          reject(new Error("Das Bild konnte nicht verarbeitet werden."));
+          return;
+        }
+        resolve(blob);
+      },
+      "image/jpeg",
+      0.82
+    );
+  });
+}
 
   return (
     <div className="comic-card relative overflow-hidden px-6 pb-8 pt-6">

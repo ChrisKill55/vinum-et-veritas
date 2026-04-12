@@ -229,67 +229,75 @@ export default async function Page() {
             }}
           />
 
-          <Section className="relative">
-            <div className="mb-10 flex items-end justify-between gap-4">
-              <SectionHeader
-                kicker="Ranking"
-                title="Top Weine aller Zeiten"
-                noMargin
-              />
-              <div className="hidden border-2 border-black bg-white px-4 py-2 text-sm font-black uppercase tracking-[0.2em] md:block">
-                Live aus der Datenbank
+        <Section className="relative">
+  <div className="mb-10 flex items-end justify-between gap-4">
+    <SectionHeader
+      kicker="Ranking"
+      title="Top Weine aller Zeiten"
+      noMargin
+    />
+    <div className="hidden border-2 border-black bg-white px-4 py-2 text-sm font-black uppercase tracking-[0.2em] md:block">
+      Live aus der Datenbank
+    </div>
+  </div>
+
+  <div className="grid gap-6 lg:grid-cols-3">
+    {topWines.map((wine) => (
+      <Link
+        key={wine.id}
+        href={`/wines/${wine.id}`}
+        className="block h-full outline-none transition hover:-translate-y-1 focus-visible:-translate-y-1"
+      >
+        <ComicCard className="relative h-full overflow-hidden px-6 pb-12 pt-6">
+          <div className="comic-badge mb-5 px-4 py-2 text-xs font-black uppercase tracking-[0.28em]">
+            Platz {wine.rank}
+          </div>
+
+          <h3 className="text-3xl font-black uppercase leading-tight tracking-tight">
+            {wine.name}
+          </h3>
+
+          <p className="mt-4 text-base font-semibold text-neutral-600">
+            {wine.producer}
+          </p>
+
+          <div className="mt-8 grid grid-cols-2 gap-3 text-sm uppercase tracking-widest text-neutral-600">
+            <div>
+              <div>Jahrgang</div>
+              <div className="mt-2 text-lg font-black text-black">
+                {wine.year}
               </div>
             </div>
-
-            <div className="grid gap-6 lg:grid-cols-3">
-              {topWines.map((wine) => (
-                <Link
-  key={wine.id}
-  href={`/wines/${wine.id}`}
-  className="block h-full outline-none transition hover:-translate-y-1 focus-visible:-translate-y-1"
->
-  <ComicCard className="relative h-full overflow-hidden px-6 pb-12 pt-6">
-    <div className="comic-badge mb-5 px-4 py-2 text-xs font-black uppercase tracking-[0.28em]">
-      Platz {wine.rank}
-    </div>
-
-    <h3 className="text-3xl font-black uppercase leading-tight tracking-tight">
-      {wine.name}
-    </h3>
-
-    <p className="mt-4 text-base font-semibold text-neutral-600">
-      {wine.producer}
-    </p>
-
-    <div className="mt-8 grid grid-cols-2 gap-3 text-sm uppercase tracking-widest text-neutral-600">
-      <div>
-        <div>Jahrgang</div>
-        <div className="mt-2 text-lg font-black text-black">
-          {wine.year}
-        </div>
-      </div>
-      <div>
-        <div>Land</div>
-        <div className="mt-2 text-lg font-black text-black">
-          {wine.country}
-        </div>
-      </div>
-    </div>
-
-    <div className="mt-8 border-t-2 border-black pt-5">
-      <div className="text-xs uppercase tracking-widest text-neutral-500">
-        Durchschnitt
-      </div>
-
-      <div className="mt-2 text-5xl font-black text-red-700">
-        {wine.score}
-      </div>
-    </div>
-  </ComicCard>
-</Link>
-              ))}
+            <div>
+              <div>Land</div>
+              <div className="mt-2 text-lg font-black text-black">
+                {wine.country}
+              </div>
             </div>
-          </Section>
+          </div>
+
+          <div className="mt-8 border-t-2 border-black pt-5">
+            <div className="text-xs uppercase tracking-widest text-neutral-500">
+              Durchschnitt
+            </div>
+
+            <div className="mt-2 text-5xl font-black text-red-700">
+              {wine.score}
+            </div>
+          </div>
+
+          {/* Neuer Button */}
+          <div className="mt-8">
+            <span className="inline-flex border-2 border-black bg-black px-4 py-3 text-sm font-black uppercase tracking-[0.2em] text-white transition-all hover:-translate-y-0.5 hover:bg-red-700">
+  Wein-Details
+</span>
+          </div>
+
+        </ComicCard>
+      </Link>
+    ))}
+  </div>
+</Section>  
         </div>
 
         <SectionAlt>
