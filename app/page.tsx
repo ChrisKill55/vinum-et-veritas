@@ -26,12 +26,22 @@ export default async function Page() {
     prisma.wines.count(),
     prisma.ratings.count(),
     prisma.members.count({
-      where: { is_active: true },
-    }),
+  where: {
+    is_active: true,
+    role_title: {
+      not: "Gastverkoster",
+    },
+  },
+}),
     prisma.members.findMany({
-      where: { is_active: true },
-      orderBy: { created_at: "asc" },
-    }),
+  where: {
+    is_active: true,
+    role_title: {
+      not: "Gastverkoster",
+    },
+  },
+  orderBy: { created_at: "asc" },
+}),
     prisma.tastings.findMany({
       orderBy: { tasting_date: "desc" },
       take: 3,
