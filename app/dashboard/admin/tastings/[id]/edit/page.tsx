@@ -65,24 +65,19 @@ export default async function EditTastingPage({ params }: PageProps) {
     },
   });
 
-  const initialTasting = {
-    id: tasting.id,
-    tasting_date: tasting.tasting_date.toISOString().slice(0, 10),
-    member_id: tasting.members?.id ?? 0,
-    wines: tasting.wines.map((wine) => ({
-      id: wine.id,
-      sequence_no: wine.sequence_no,
-      producer: wine.producer ?? "",
-      wine_name: wine.wine_name ?? "",
-      vintage: wine.vintage?.toString() ?? "",
-      country: wine.country ?? "",
-      region: wine.region ?? "",
-      grape_variety: wine.grape_variety ?? "",
-      alcohol_pct: wine.alcohol_pct?.toString() ?? "",
-      price_eur: wine.price_eur?.toString() ?? "",
-      comment: wine.comment ?? "",
-    })),
-  };
+  const winesInitial = (tasting.wines ?? []).map((wine) => ({
+    id: wine.id,
+    sequence_no: wine.sequence_no,
+    producer: wine.producer ?? "",
+    wine_name: wine.wine_name ?? "",
+    vintage: wine.vintage != null ? String(wine.vintage) : "",
+    country: wine.country ?? "",
+    region: wine.region ?? "",
+    grape_variety: wine.grape_variety ?? "",
+    alcohol_pct: wine.alcohol_pct != null ? String(wine.alcohol_pct) : "",
+    price_eur: wine.price_eur != null ? String(wine.price_eur) : "",
+    comment: wine.comment ?? "",
+  }));
 
   return (
     <div className="bg-white text-neutral-950">
@@ -100,7 +95,16 @@ export default async function EditTastingPage({ params }: PageProps) {
           title={`Tasting vom ${new Date(tasting.tasting_date).toLocaleDateString("de-DE")}`}
         />
 
-        <EditTastingForm hosts={hosts} initialTasting={initialTasting} />
+        <EditTastingForm
+          tastingId={tasting.id}
+          initialDate={tasting.tasting_date.toISOString().slice(0, 10)}
+          initialMemberId={tasting.members?.id ?? 0}
+          hosts={hosts.map((host) => ({
+            id: host.id,
+            display_name: host.display_name ?? "Unbekannt",
+          }))}
+          winesInitial={winesInitial}
+        />
       </Section>
     </div>
   );
