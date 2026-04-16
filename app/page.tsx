@@ -28,16 +28,16 @@ export default async function Page() {
     prisma.members.count({
   where: {
     is_active: true,
-    role_title: {
-      not: "Gastverkoster",
+    NOT: {
+      first_name: "Gast",
     },
   },
 }),
     prisma.members.findMany({
   where: {
     is_active: true,
-    role_title: {
-      not: "Gastverkoster",
+    NOT: {
+      first_name: "Gast",
     },
   },
   orderBy: { created_at: "asc" },
