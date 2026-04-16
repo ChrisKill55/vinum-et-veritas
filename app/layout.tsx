@@ -20,8 +20,13 @@ export const metadata = {
   title: "Vinum et Veritas – Weinclub",
   description: "Sechs Freunde. Viel Rotwein. Ehrliche Urteile.",
   icons: {
-    icon: "/icons/icon-192.png",
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/icons/icon-192.png", type: "image/png", sizes: "192x192" },
+      { url: "/icons/icon-512.png", type: "image/png", sizes: "512x512" },
+    ],
     apple: "/icons/apple-touch-icon.png",
+    shortcut: "/favicon.ico",
   },
   manifest: "/manifest.json",
 };
