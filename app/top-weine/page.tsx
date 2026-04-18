@@ -1,3 +1,5 @@
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import HeroSection from "@/app/components/ui/HeroSection";
 import TopWinesList from "./top-wines-list";
@@ -6,7 +8,30 @@ export const dynamic = "force-dynamic";
 
 const PAGE_SIZE = 12;
 
-export default async function TopWinesPage() {
+type PageProps = {
+  searchParams?: Promise<{
+    q?: string;
+  }>;
+};
+
+export default async function TopWinesPage({ searchParams }: PageProps) {
+  const session = await getServerSession(authOptions);
+
+  let isAdmin = false;
+
+  if (session?.user?.email) {
+    const member = await prisma.members.findUnique({
+      where: { email: session.user.email },
+      select: { role: true },
+    });
+
+    const role = String(member?.role ?? "").toUpperCase();
+    isAdmin = role === "ADMIN" || role === "PRESIDENT";
+  }
+
+  const resolvedSearchParams = searchParams ? await searchParams : {};
+  const query = (resolvedSearchParams.q ?? "").trim().toLowerCase();
+
   const wines = await prisma.wines.findMany({
     include: {
       ratings: {
@@ -20,13 +45,29 @@ export default async function TopWinesPage() {
   const winesWithAverage = wines
     .map((wine) => {
       const values = wine.ratings
-        .map((r) => (r.overall_score !== null ? Number(r.overall_score) : null))
+        .map((r) =>
+          r.overall_score !== null ? Number(r.overall_score) : null
+        )
         .filter((v): v is number => v !== null && !Number.isNaN(v));
 
-      const avg =
-        values.length > 0
-          ? values.reduce((sum, v) => sum + v, 0) / values.length
-          : null;
+      if (values.length === 0) {
+        return null;
+      }
+
+      const average =
+        values.reduce((sum, v) => sum + v, 0) / values.length;
+
+      const searchableText = [
+        wine.producer,
+        wine.wine_name,
+        wine.country,
+        wine.region,
+        wine.grape_variety,
+        wine.vintage != null ? String(wine.vintage) : "",
+      ]
+        .filter(Boolean)
+        .join(" ")
+        .toLowerCase();
 
       return {
         id: wine.id,
@@ -35,14 +76,21 @@ export default async function TopWinesPage() {
         vintage: wine.vintage,
         country: wine.country,
         comment: wine.comment,
-        average: avg,
+        average,
         ratingCount: values.length,
+        searchableText,
       };
     })
-    .filter((wine) => wine.average !== null)
-    .sort((a, b) => (b.average ?? 0) - (a.average ?? 0));
+    .filter((wine): wine is NonNullable<typeof wine> => wine !== null)
+    .filter((wine) => {
+      if (!query) return true;
+      return wine.searchableText.includes(query);
+    })
+    .sort((a, b) => b.average - a.average);
 
-  const initialWines = winesWithAverage.slice(0, PAGE_SIZE);
+  const initialWines = winesWithAverage
+    .slice(0, PAGE_SIZE)
+    .map(({ searchableText, ...wine }) => wine);
 
   return (
     <div className="bg-white text-neutral-950">
@@ -65,7 +113,11 @@ export default async function TopWinesPage() {
       >
         <main className="px-6 py-20 pb-32">
           <div className="mx-auto max-w-7xl">
-            <TopWinesList initialWines={initialWines} />
+            <TopWinesList
+              initialWines={initialWines}
+              initialQuery={query}
+              isAdmin={isAdmin}
+            />
           </div>
         </main>
       </div>

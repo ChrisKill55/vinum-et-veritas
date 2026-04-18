@@ -1,12 +1,15 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
-export async function GET(request: Request) {
+export const dynamic = "force-dynamic";
+
+export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
 
-    const skip = Number(searchParams.get("skip") ?? 0);
-    const take = Number(searchParams.get("take") ?? 12);
+    const skip = Number(searchParams.get("skip") ?? "0");
+    const take = Number(searchParams.get("take") ?? "12");
+    const query = (searchParams.get("q") ?? "").trim().toLowerCase();
 
     const wines = await prisma.wines.findMany({
       include: {
@@ -26,10 +29,24 @@ export async function GET(request: Request) {
           )
           .filter((v): v is number => v !== null && !Number.isNaN(v));
 
-        const avg =
-          values.length > 0
-            ? values.reduce((sum, v) => sum + v, 0) / values.length
-            : null;
+        if (values.length === 0) {
+          return null;
+        }
+
+        const average =
+          values.reduce((sum, v) => sum + v, 0) / values.length;
+
+        const searchableText = [
+          wine.producer,
+          wine.wine_name,
+          wine.country,
+          wine.region,
+          wine.grape_variety,
+          wine.vintage != null ? String(wine.vintage) : "",
+        ]
+          .filter(Boolean)
+          .join(" ")
+          .toLowerCase();
 
         return {
           id: wine.id,
@@ -38,20 +55,25 @@ export async function GET(request: Request) {
           vintage: wine.vintage,
           country: wine.country,
           comment: wine.comment,
-          average: avg,
+          average,
           ratingCount: values.length,
+          searchableText,
         };
       })
-      .filter((wine) => wine.average !== null)
-      .sort((a, b) => (b.average ?? 0) - (a.average ?? 0))
-      .slice(skip, skip + take);
+      .filter((wine): wine is NonNullable<typeof wine> => wine !== null)
+      .filter((wine) => {
+        if (!query) return true;
+        return wine.searchableText.includes(query);
+      })
+      .sort((a, b) => b.average - a.average)
+      .slice(skip, skip + take)
+      .map(({ searchableText, ...wine }) => wine);
 
     return NextResponse.json(winesWithAverage);
   } catch (error) {
-    console.error("API /api/top-wines Fehler:", error);
-
+    console.error("GET /api/top-wines Fehler:", error);
     return NextResponse.json(
-      { error: "Fehler beim Laden weiterer Top-Weine." },
+      { error: "Top-Weine konnten nicht geladen werden." },
       { status: 500 }
     );
   }

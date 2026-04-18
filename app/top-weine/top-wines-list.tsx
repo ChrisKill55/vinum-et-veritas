@@ -18,15 +18,67 @@ type TopWineItem = {
 
 type TopWinesListProps = {
   initialWines: TopWineItem[];
+  initialQuery?: string;
+  isAdmin?: boolean;
 };
 
 const PAGE_SIZE = 12;
 
-export default function TopWinesList({ initialWines }: TopWinesListProps) {
+export default function TopWinesList({
+  initialWines,
+  initialQuery = "",
+  isAdmin = false,
+}: TopWinesListProps) {
   const [wines, setWines] = useState<TopWineItem[]>(initialWines);
+  const [query, setQuery] = useState(initialQuery);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(initialWines.length === PAGE_SIZE);
   const [error, setError] = useState<string | null>(null);
+
+  async function handleSearch(formData: FormData) {
+    const nextQuery = String(formData.get("q") ?? "").trim();
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await fetch(
+        `/api/top-wines?skip=0&take=${PAGE_SIZE}&q=${encodeURIComponent(
+          nextQuery
+        )}`,
+        {
+          method: "GET",
+          cache: "no-store",
+        }
+      );
+
+      const text = await response.text();
+
+      if (!response.ok) {
+        console.error("API Response Status:", response.status);
+        console.error("API Response Body:", text);
+        setError("Die Suche konnte nicht ausgeführt werden.");
+        setLoading(false);
+        return;
+      }
+
+      const nextWines = JSON.parse(text) as TopWineItem[];
+
+      if (!Array.isArray(nextWines)) {
+        setError("Die Suche konnte nicht ausgeführt werden.");
+        setLoading(false);
+        return;
+      }
+
+      setQuery(nextQuery);
+      setWines(nextWines);
+      setHasMore(nextWines.length === PAGE_SIZE);
+    } catch (err) {
+      console.error("Fehler bei der Weinsuche:", err);
+      setError("Die Suche konnte nicht ausgeführt werden.");
+    } finally {
+      setLoading(false);
+    }
+  }
 
   async function loadMore() {
     if (loading || !hasMore) return;
@@ -36,7 +88,9 @@ export default function TopWinesList({ initialWines }: TopWinesListProps) {
 
     try {
       const response = await fetch(
-        `/api/top-wines?skip=${wines.length}&take=${PAGE_SIZE}`,
+        `/api/top-wines?skip=${wines.length}&take=${PAGE_SIZE}&q=${encodeURIComponent(
+          query
+        )}`,
         {
           method: "GET",
           cache: "no-store",
@@ -82,6 +136,44 @@ export default function TopWinesList({ initialWines }: TopWinesListProps) {
 
   return (
     <>
+      <ComicCard className="relative mb-10 overflow-hidden px-6 pb-8 pt-6">
+        <div className="mb-2 text-sm font-black uppercase tracking-[0.3em] text-red-700">
+          Weinsuche
+        </div>
+
+        <h2 className="text-3xl font-black uppercase tracking-tight">
+          Finde Weine im Ranking
+        </h2>
+
+        <form action={handleSearch} className="mt-6 grid gap-4 md:grid-cols-[1fr_auto]">
+          <input
+            type="text"
+            name="q"
+            defaultValue={query}
+            placeholder="z. B. Barolo, Cusumano, Italien, Riesling ..."
+            className="w-full border-2 border-black bg-white px-4 py-3 text-base focus:outline-none"
+          />
+
+          <div className="flex gap-3">
+            <button
+              type="submit"
+              disabled={loading}
+              className="border-2 border-black bg-black px-5 py-3 text-sm font-black uppercase tracking-[0.2em] text-white transition hover:-translate-y-0.5 hover:bg-red-700"
+            >
+              {loading ? "Suche läuft..." : "Suchen"}
+            </button>
+
+            <button
+              type="button"
+              onClick={() => window.location.href = "/top-weine"}
+              className="border-2 border-black bg-white px-5 py-3 text-sm font-black uppercase tracking-[0.2em] text-black transition hover:-translate-y-0.5"
+            >
+              Zurücksetzen
+            </button>
+          </div>
+        </form>
+      </ComicCard>
+
       <div className="mb-14 max-w-3xl">
         <div className="lg:hidden">
           <ComicCard className="relative overflow-hidden px-6 pb-8 pt-6">
@@ -132,6 +224,12 @@ export default function TopWinesList({ initialWines }: TopWinesListProps) {
         </div>
       </div>
 
+      <div className="mb-8 text-sm font-black uppercase tracking-[0.2em] text-neutral-500">
+        {query
+          ? `${wines.length} Treffer für „${query}“`
+          : `${wines.length} Wein${wines.length === 1 ? "" : "e"} angezeigt`}
+      </div>
+
       <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
         {wines.map((wine, index) => {
           const wineLabel =
@@ -141,66 +239,75 @@ export default function TopWinesList({ initialWines }: TopWinesListProps) {
               ? wine.wine_name
               : [wine.producer, wine.wine_name].filter(Boolean).join(" ");
 
-         return (
-  <Link
-    key={wine.id}
-    href={`/wines/${wine.id}`}
-    className="block h-full cursor-pointer transition hover:-translate-y-1"
-  >
-    <ComicCard className="relative flex h-full flex-col overflow-hidden px-6 pb-12 pt-6">
-      <div className="flex items-center justify-between gap-4">
-        <div className="text-xs font-black uppercase tracking-[0.2em] text-red-700">
-          Platz #{index + 1}
-        </div>
+          return (
+            <ComicCard
+              key={wine.id}
+              className="relative flex h-full flex-col overflow-hidden px-6 pb-12 pt-6 transition hover:-translate-y-1"
+            >
+              <div className="flex items-center justify-between gap-4">
+                <div className="text-xs font-black uppercase tracking-[0.2em] text-red-700">
+                  Platz #{index + 1}
+                </div>
 
-        <div className="text-xs font-black uppercase tracking-[0.2em] text-neutral-500">
-          {wine.ratingCount} Bewertung
-          {wine.ratingCount === 1 ? "" : "en"}
-        </div>
-      </div>
+                <div className="text-xs font-black uppercase tracking-[0.2em] text-neutral-500">
+                  {wine.ratingCount} Bewertung
+                  {wine.ratingCount === 1 ? "" : "en"}
+                </div>
+              </div>
 
-      <h3 className="mt-3 break-words text-2xl font-black uppercase leading-tight">
-        {[wineLabel, wine.vintage].filter(Boolean).join(" ")}
-      </h3>
+              <h3 className="mt-3 break-words text-2xl font-black uppercase leading-tight">
+                {[wineLabel, wine.vintage].filter(Boolean).join(" ")}
+              </h3>
 
-      <div className="mt-4 text-sm text-neutral-600">
-        {wine.country || "Unbekannt"}
-      </div>
+              <div className="mt-4 text-sm text-neutral-600">
+                {wine.country || "Unbekannt"}
+              </div>
 
-      <div className="mt-6 border-t-2 border-black pt-5">
-        <div className="mb-3 flex flex-col gap-3">
-          <WineGlassRating value={wine.average ?? 0} />
+              <div className="mt-6 border-t-2 border-black pt-5">
+                <div className="mb-3 flex flex-col gap-3">
+                  <WineGlassRating value={wine.average ?? 0} />
 
-          <div className="text-lg font-black">
-            {wine.average?.toFixed(1)} / 10
-          </div>
-        </div>
-      </div>
+                  <div className="text-lg font-black">
+                    {wine.average?.toFixed(1)} / 10
+                  </div>
+                </div>
+              </div>
 
-      <div className="mt-6 flex-1 border-t-2 border-black pt-5">
-        <div className="mb-2 text-xs font-black uppercase tracking-[0.2em] text-neutral-500">
-          Gruppenstatement
-        </div>
+              <div className="mt-6 flex-1 border-t-2 border-black pt-5">
+                <div className="mb-2 text-xs font-black uppercase tracking-[0.2em] text-neutral-500">
+                  Gruppenstatement
+                </div>
 
-        {wine.comment ? (
-          <p className="line-clamp-4 text-sm leading-7 text-neutral-700">
-            {wine.comment}
-          </p>
-        ) : (
-          <p className="text-sm leading-7 text-neutral-400">
-            Kein Gruppenstatement vorhanden.
-          </p>
-        )}
-      </div>
+                {wine.comment ? (
+                  <p className="line-clamp-4 text-sm leading-7 text-neutral-700">
+                    {wine.comment}
+                  </p>
+                ) : (
+                  <p className="text-sm leading-7 text-neutral-400">
+                    Kein Gruppenstatement vorhanden.
+                  </p>
+                )}
+              </div>
 
-      <div className="mt-8">
-        <span className="inline-flex border-2 border-black bg-black px-4 py-3 text-sm font-black uppercase tracking-[0.2em] text-white transition-all hover:-translate-y-0.5 hover:bg-red-700">
-  Wein-Details
-</span>
-      </div>
-    </ComicCard>
-  </Link>
-); 
+              <div className="mt-8 flex flex-wrap gap-3">
+                <Link
+                  href={`/wines/${wine.id}`}
+                  className="inline-flex border-2 border-black bg-black px-4 py-3 text-sm font-black uppercase tracking-[0.2em] text-white transition-all hover:-translate-y-0.5 hover:bg-red-700"
+                >
+                  Wein-Details
+                </Link>
+
+                {isAdmin && (
+                  <Link
+                    href={`/dashboard/wines/${wine.id}/edit`}
+                    className="inline-flex border-2 border-black bg-white px-4 py-3 text-sm font-black uppercase tracking-[0.2em] text-black transition hover:-translate-y-0.5"
+                  >
+                    Bearbeiten
+                  </Link>
+                )}
+              </div>
+            </ComicCard>
+          );
         })}
       </div>
 
