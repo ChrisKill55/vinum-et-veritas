@@ -94,6 +94,29 @@ export default async function AdminDashboardPage() {
               </Link>
             </div>
           </ComicCard>
+          <ComicCard className="relative overflow-hidden px-6 pb-12 pt-6">
+          <div className="text-xs font-black uppercase tracking-[0.22em] text-red-700">
+          Weinpflege
+          </div>
+
+          <h3 className="mt-3 text-2xl font-black uppercase leading-tight">
+          Wein suchen &amp; bearbeiten
+          </h3>
+
+          <p className="mt-5 text-sm leading-7 text-neutral-700">
+          Finde Weine gezielt über Name, Produzent, Jahrgang oder Land und springe
+          direkt in die Bearbeitung.
+          </p>
+
+          <div className="mt-8">
+          <Link
+          href="/dashboard/admin/wines"
+          className="inline-flex border-2 border-black bg-black px-4 py-3 text-sm font-black uppercase tracking-[0.2em] text-white transition hover:-translate-y-0.5"
+          >
+          Zur Weinsuche
+          </Link>
+          </div>
+          </ComicCard>
         </div>
       </Section>
     </div>
