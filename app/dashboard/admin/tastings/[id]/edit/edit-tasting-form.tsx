@@ -18,6 +18,19 @@ type WineFormItem = {
   comment: string;
 };
 
+type HostOption = {
+  id: number;
+  display_name: string | null;
+};
+
+type EditTastingFormProps = {
+  tastingId: number;
+  initialDate: string;
+  initialMemberId: number;
+  hosts?: HostOption[];
+  winesInitial?: WineFormItem[];
+};
+
 function createEmptyWine(sequenceNo: number): WineFormItem {
   return {
     sequence_no: sequenceNo,
@@ -37,14 +50,17 @@ export default function EditTastingForm({
   tastingId,
   initialDate,
   initialMemberId,
-  hosts,
-  winesInitial,
-}: any) {
+  hosts = [],
+  winesInitial = [],
+}: EditTastingFormProps) {
   const router = useRouter();
+
+  const normalizedInitialWines =
+    winesInitial.length > 0 ? winesInitial : [createEmptyWine(1)];
 
   const [tastingDate, setTastingDate] = useState(initialDate);
   const [memberId, setMemberId] = useState(String(initialMemberId));
-  const [wines, setWines] = useState<WineFormItem[]>(winesInitial);
+  const [wines, setWines] = useState<WineFormItem[]>(normalizedInitialWines);
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState("");
 
@@ -106,12 +122,8 @@ export default function EditTastingForm({
             country: wine.country.trim() || null,
             region: wine.region.trim() || null,
             grape_variety: wine.grape_variety.trim() || null,
-            alcohol_pct: wine.alcohol_pct
-              ? Number(wine.alcohol_pct)
-              : null,
-            price_eur: wine.price_eur
-              ? Number(wine.price_eur)
-              : null,
+            alcohol_pct: wine.alcohol_pct ? Number(wine.alcohol_pct) : null,
+            price_eur: wine.price_eur ? Number(wine.price_eur) : null,
             comment: wine.comment.trim() || null,
           })),
         }),
@@ -165,9 +177,9 @@ export default function EditTastingForm({
               onChange={(e) => setMemberId(e.target.value)}
               className="w-full border-2 border-black px-4 py-3"
             >
-              {hosts.map((host: any) => (
+              {hosts.map((host) => (
                 <option key={host.id} value={host.id}>
-                  {host.display_name}
+                  {host.display_name ?? "Unbekannt"}
                 </option>
               ))}
             </select>
@@ -196,7 +208,7 @@ export default function EditTastingForm({
 
       <div className="space-y-8">
         {wines.map((wine, index) => (
-          <ComicCard key={index} className="px-6 pb-8 pt-6">
+          <ComicCard key={wine.id ?? index} className="px-6 pb-8 pt-6">
             <div className="mb-6 flex items-start justify-between">
               <h3 className="text-2xl font-black uppercase">
                 Wein {index + 1}
@@ -216,45 +228,35 @@ export default function EditTastingForm({
               <input
                 placeholder="Produzent"
                 value={wine.producer}
-                onChange={(e) =>
-                  updateWine(index, "producer", e.target.value)
-                }
+                onChange={(e) => updateWine(index, "producer", e.target.value)}
                 className="border-2 border-black px-4 py-3"
               />
 
               <input
                 placeholder="Weinname"
                 value={wine.wine_name}
-                onChange={(e) =>
-                  updateWine(index, "wine_name", e.target.value)
-                }
+                onChange={(e) => updateWine(index, "wine_name", e.target.value)}
                 className="border-2 border-black px-4 py-3"
               />
 
               <input
                 placeholder="Jahrgang"
                 value={wine.vintage}
-                onChange={(e) =>
-                  updateWine(index, "vintage", e.target.value)
-                }
+                onChange={(e) => updateWine(index, "vintage", e.target.value)}
                 className="border-2 border-black px-4 py-3"
               />
 
               <input
                 placeholder="Land"
                 value={wine.country}
-                onChange={(e) =>
-                  updateWine(index, "country", e.target.value)
-                }
+                onChange={(e) => updateWine(index, "country", e.target.value)}
                 className="border-2 border-black px-4 py-3"
               />
 
               <input
                 placeholder="Region"
                 value={wine.region}
-                onChange={(e) =>
-                  updateWine(index, "region", e.target.value)
-                }
+                onChange={(e) => updateWine(index, "region", e.target.value)}
                 className="border-2 border-black px-4 py-3"
               />
 
@@ -276,9 +278,7 @@ export default function EditTastingForm({
               <textarea
                 rows={4}
                 value={wine.comment}
-                onChange={(e) =>
-                  updateWine(index, "comment", e.target.value)
-                }
+                onChange={(e) => updateWine(index, "comment", e.target.value)}
                 className="w-full border-2 border-black px-4 py-3"
                 placeholder="Gemeinsames Fazit des Weinabends zu diesem Wein..."
               />

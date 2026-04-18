@@ -78,6 +78,26 @@ export default async function Page() {
     Heiko: "/images/avatar-heiko.jpg",
   };
 
+  const descriptionMap: Record<string, string> = {
+  Christian:
+    "Redet über Wein, denkt über Wein nach und sorgt dafür, dass keiner einfach nur still im Glas verschwindet. Wenn ein Wein polarisiert, ist er der Erste, der die Diskussion eröffnet – und der Letzte, der sie beendet.",
+
+  Torsten:
+    "Hält den Laden zusammen, wenn es drauf ankommt – und entscheidet im Zweifel, ob noch eine Flasche geöffnet wird. Führt mit ruhiger Hand durch den Abend, solange das Glas gefüllt ist.",
+
+  Thorsten:
+    "Analysiert kompromisslos, spricht aus, was andere nur denken, und kennt keine Gnade bei mittelmäßigen Tropfen. Wenn ein Wein durchfällt, dann bei ihm zuerst.",
+
+  Stefan:
+    "Genießt nicht nur, sondern hält fest, was andere am nächsten Morgen vergessen haben. Archiviert Abende, Kommentare und legendäre Fehlgriffe für die Ewigkeit.",
+
+  Niels:
+    "Zergliedert jeden Wein in seine Einzelteile und findet auch die Nuancen, die keiner gesucht hat. Präzise, strukturiert und selten zufrieden mit der ersten Einschätzung.",
+
+  Heiko:
+    "Jüngstes Mitglied im Club, aber längst auf Mission: Wein verstehen, erleben und weitergeben. Bringt frischen Blick in die Runde – und lässt sich trotzdem nichts vormachen.",
+};
+
   const stats = [
     { label: "Tastings", value: String(tastingsCount) },
     { label: "Weine", value: String(winesCount) },
@@ -143,12 +163,18 @@ export default async function Page() {
 
   const memberCards = members.map((member) => {
   const displayName = member.display_name ?? "Unbekannt";
+  const key = displayName.trim(); // wichtig!
 
   return {
     name: displayName,
     role: member.role_title ?? "Mitglied",
     accent: displayName.charAt(0).toUpperCase(),
     avatar: avatarMap[displayName] ?? "/images/avatar-placeholder.jpg",
+
+    // 👇 DAS ist neu
+    description:
+      descriptionMap[key] ??
+      "Teil des Clubs, Teil der Urteile und garantiert nicht still, wenn ein Wein zu viel verspricht und zu wenig liefert.",
   };
 });
 
@@ -393,8 +419,7 @@ export default async function Page() {
                   </p>
 
                   <p className="mt-5 max-w-[28ch] text-sm leading-7 text-neutral-700">
-                    Teil des Clubs, Teil der Urteile und garantiert nicht still,
-                    wenn ein Wein zu viel verspricht und zu wenig liefert.
+                  {member.description}
                   </p>
                 </ComicCard>
               ))}
