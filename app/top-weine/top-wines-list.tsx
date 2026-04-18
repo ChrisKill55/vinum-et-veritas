@@ -145,33 +145,38 @@ export default function TopWinesList({
           Finde Weine im Ranking
         </h2>
 
-        <form action={handleSearch} className="mt-6 grid gap-4 md:grid-cols-[1fr_auto]">
-          <input
-            type="text"
-            name="q"
-            defaultValue={query}
-            placeholder="z. B. Barolo, Cusumano, Italien, Riesling ..."
-            className="w-full border-2 border-black bg-white px-4 py-3 text-base focus:outline-none"
-          />
+        <form
+  action={handleSearch}
+  className="mt-6 grid gap-4 md:grid-cols-[1fr_auto]"
+>
+  <input
+    type="text"
+    name="q"
+    defaultValue={query}
+    placeholder="z. B. Barolo, Cusumano, Italien, Riesling ..."
+    className="w-full min-w-0 border-2 border-black bg-white px-4 py-3 text-base focus:outline-none"
+  />
 
-          <div className="flex gap-3">
-            <button
-              type="submit"
-              disabled={loading}
-              className="border-2 border-black bg-black px-5 py-3 text-sm font-black uppercase tracking-[0.2em] text-white transition hover:-translate-y-0.5 hover:bg-red-700"
-            >
-              {loading ? "Suche läuft..." : "Suchen"}
-            </button>
+  <div className="grid gap-3 sm:grid-cols-2 md:flex">
+    <button
+      type="submit"
+      disabled={loading}
+      className="w-full border-2 border-black bg-black px-5 py-3 text-sm font-black uppercase tracking-[0.2em] text-white transition hover:-translate-y-0.5 hover:bg-red-700 md:w-auto"
+    >
+      {loading ? "Suche läuft..." : "Suchen"}
+    </button>
 
-            <button
-              type="button"
-              onClick={() => window.location.href = "/top-weine"}
-              className="border-2 border-black bg-white px-5 py-3 text-sm font-black uppercase tracking-[0.2em] text-black transition hover:-translate-y-0.5"
-            >
-              Zurücksetzen
-            </button>
-          </div>
-        </form>
+    <button
+      type="button"
+      onClick={() => {
+        window.location.href = "/top-weine";
+      }}
+      className="w-full border-2 border-black bg-white px-5 py-3 text-sm font-black uppercase tracking-[0.2em] text-black transition hover:-translate-y-0.5 md:w-auto"
+    >
+      Zurücksetzen
+    </button>
+  </div>
+</form>
       </ComicCard>
 
       <div className="mb-14 max-w-3xl">

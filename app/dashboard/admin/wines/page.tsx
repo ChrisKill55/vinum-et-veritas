@@ -117,41 +117,44 @@ export default async function AdminWinesPage({ searchParams }: PageProps) {
         />
 
         <ComicCard className="relative mb-10 overflow-hidden px-6 pb-8 pt-6">
-          <form action="/dashboard/admin/wines" className="grid gap-4 md:grid-cols-[1fr_auto]">
-            <div>
-              <label
-                htmlFor="q"
-                className="mb-2 block text-sm font-black uppercase tracking-[0.2em]"
-              >
-                Suche
-              </label>
+        <form
+  action="/dashboard/admin/wines"
+  className="grid gap-4 md:grid-cols-[1fr_auto]"
+>
+  <div>
+    <label
+      htmlFor="q"
+      className="mb-2 block text-sm font-black uppercase tracking-[0.2em]"
+    >
+      Suche
+    </label>
 
-              <input
-                id="q"
-                name="q"
-                type="text"
-                defaultValue={query}
-                placeholder="z. B. Barolo, Cusumano, Italien, 2018 ..."
-                className="w-full border-2 border-black bg-white px-4 py-3 text-base focus:outline-none"
-              />
-            </div>
+    <input
+      id="q"
+      name="q"
+      type="text"
+      defaultValue={query}
+      placeholder="z. B. Barolo, Cusumano, Italien, 2018 ..."
+      className="w-full min-w-0 border-2 border-black bg-white px-4 py-3 text-base focus:outline-none"
+    />
+  </div>
 
-            <div className="flex items-end gap-3">
-              <button
-                type="submit"
-                className="border-2 border-black bg-black px-5 py-3 text-sm font-black uppercase tracking-[0.2em] text-white transition hover:-translate-y-0.5"
-              >
-                Suchen
-              </button>
+  <div className="grid gap-3 sm:grid-cols-2 md:flex md:items-end">
+    <button
+      type="submit"
+      className="w-full border-2 border-black bg-black px-5 py-3 text-sm font-black uppercase tracking-[0.2em] text-white transition hover:-translate-y-0.5 md:w-auto"
+    >
+      Suchen
+    </button>
 
-              <Link
-                href="/dashboard/admin/wines"
-                className="border-2 border-black bg-white px-5 py-3 text-sm font-black uppercase tracking-[0.2em] text-black transition hover:-translate-y-0.5"
-              >
-                Zurücksetzen
-              </Link>
-            </div>
-          </form>
+    <Link
+      href="/dashboard/admin/wines"
+      className="w-full border-2 border-black bg-white px-5 py-3 text-center text-sm font-black uppercase tracking-[0.2em] text-black transition hover:-translate-y-0.5 md:w-auto"
+    >
+      Zurücksetzen
+    </Link>
+  </div>
+</form>  
         </ComicCard>
 
         <div className="mb-8 text-sm font-black uppercase tracking-[0.2em] text-neutral-500">
