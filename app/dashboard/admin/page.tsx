@@ -8,6 +8,7 @@ import Section from "@/app/components/ui/Section";
 import SectionHeader from "@/app/components/ui/SectionHeader";
 import ComicCard from "@/app/components/ui/ComicCard";
 
+export const dynamic = "force-dynamic";
 export default async function AdminDashboardPage() {
   const session = await getServerSession(authOptions);
 

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/auth";
 import { prisma } from "@/lib/prisma";
+import { revalidatePath } from "next/cache";
 
 type RouteContext = {
   params: Promise<{
@@ -45,20 +46,31 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
     const body = await request.json();
 
     const updatedWine = await prisma.wines.update({
-      where: { id },
-      data: {
-        producer: body.producer,
-        wine_name: body.wine_name,
-        vintage: body.vintage,
-        country: body.country,
-        region: body.region,
-        grape_variety: body.grape_variety,
-        alcohol_pct: body.alcohol_pct,
-        price_eur: body.price_eur,
-        comment: body.comment,
-      },
-    });
+  where: { id },
+  data: {
+    producer: body.producer,
+    wine_name: body.wine_name,
+    vintage: body.vintage,
+    country: body.country,
+    region: body.region,
+    grape_variety: body.grape_variety,
+    alcohol_pct: body.alcohol_pct,
+    price_eur: body.price_eur,
+    comment: body.comment,
+  },
+  select: {
+    id: true,
+    tasting_id: true,
+  },
+});
+  // Cache invalidieren
+revalidatePath("/");
+revalidatePath("/top-weine");
+revalidatePath(`/wines/${updatedWine.id}`);
 
+if (updatedWine.tasting_id) {
+  revalidatePath(`/tastings/${updatedWine.tasting_id}`);
+}
     return NextResponse.json(updatedWine);
   } catch (error) {
     console.error("PATCH /api/admin/wines/[wineId] Fehler:", error);

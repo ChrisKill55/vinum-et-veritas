@@ -7,6 +7,7 @@ import Section from "@/app/components/ui/Section";
 import SectionHeader from "@/app/components/ui/SectionHeader";
 import EditTastingForm from "./edit-tasting-form";
 
+export const dynamic = "force-dynamic";
 type PageProps = {
   params: Promise<{
     id: string;

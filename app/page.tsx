@@ -418,7 +418,7 @@ export default async function Page() {
                     {member.role}
                   </p>
 
-                  <p className="mt-5 max-w-[28ch] text-sm leading-7 text-neutral-700">
+                  <p className="mt-5 text-sm leading-7 text-neutral-700">
                   {member.description}
                   </p>
                 </ComicCard>
