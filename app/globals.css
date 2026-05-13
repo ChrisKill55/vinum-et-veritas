@@ -114,6 +114,11 @@ body {
   transform: rotate(-0.5deg);
 }
 
+button > .h-10.w-10.rounded-full,
+button > .h-12.w-12.rounded-full {
+  flex-shrink: 0;
+}
+
 .comic-card-soft {
   background-color: #fafafa;
   background-image: radial-gradient(rgba(0, 0, 0, 0.03) 0.6px, transparent 0.6px);
