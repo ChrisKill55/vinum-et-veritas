@@ -120,7 +120,17 @@ button > .h-12.w-12.rounded-full {
 }
 
 input[type="date"] {
-  max-width: 100%;
+  -webkit-appearance: none;
+  appearance: none;
+  box-sizing: border-box;
+  display: block;
+  inline-size: 100%;
+  max-inline-size: 100%;
+  min-inline-size: 0;
+  width: 100%;
+}
+
+.comic-card .grid > * {
   min-width: 0;
 }
 
