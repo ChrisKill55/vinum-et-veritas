@@ -119,6 +119,11 @@ button > .h-12.w-12.rounded-full {
   flex-shrink: 0;
 }
 
+input[type="date"] {
+  max-width: 100%;
+  min-width: 0;
+}
+
 .comic-card-soft {
   background-color: #fafafa;
   background-image: radial-gradient(rgba(0, 0, 0, 0.03) 0.6px, transparent 0.6px);
