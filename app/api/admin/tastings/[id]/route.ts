@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/auth";
 import { prisma } from "@/lib/prisma";
+import { ensureOpenRatingsForTasting } from "@/lib/tasting-ratings";
 
 type IncomingWine = {
   id?: number | null;
@@ -199,6 +200,8 @@ export async function PATCH(
         });
       }
     }
+
+    await ensureOpenRatingsForTasting(tastingId);
 
     return NextResponse.json({ ok: true });
   } catch (error) {

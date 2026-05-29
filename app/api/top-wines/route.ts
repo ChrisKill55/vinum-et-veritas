@@ -67,7 +67,16 @@ export async function GET(request: NextRequest) {
       })
       .sort((a, b) => b.average - a.average)
       .slice(skip, skip + take)
-      .map(({ searchableText, ...wine }) => wine);
+      .map((wine) => ({
+        id: wine.id,
+        producer: wine.producer,
+        wine_name: wine.wine_name,
+        vintage: wine.vintage,
+        country: wine.country,
+        comment: wine.comment,
+        average: wine.average,
+        ratingCount: wine.ratingCount,
+      }));
 
     return NextResponse.json(winesWithAverage);
   } catch (error) {

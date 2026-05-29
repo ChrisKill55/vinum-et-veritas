@@ -6,7 +6,6 @@ import { prisma } from "@/lib/prisma";
 import HeroSection from "@/app/components/ui/HeroSection";
 import Section from "@/app/components/ui/Section";
 import SectionHeader from "@/app/components/ui/SectionHeader";
-import WineGlassInput from "@/app/components/ui/WineGlassInput";
 import ComicCard from "@/app/components/ui/ComicCard";
 import ReviewForm from "./review-form";
 

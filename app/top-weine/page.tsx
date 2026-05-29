@@ -90,7 +90,16 @@ export default async function TopWinesPage({ searchParams }: PageProps) {
 
   const initialWines = winesWithAverage
     .slice(0, PAGE_SIZE)
-    .map(({ searchableText, ...wine }) => wine);
+    .map((wine) => ({
+      id: wine.id,
+      producer: wine.producer,
+      wine_name: wine.wine_name,
+      vintage: wine.vintage,
+      country: wine.country,
+      comment: wine.comment,
+      average: wine.average,
+      ratingCount: wine.ratingCount,
+    }));
 
   return (
     <div className="bg-white text-neutral-950">

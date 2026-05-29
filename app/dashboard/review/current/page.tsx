@@ -4,11 +4,11 @@ import Section from "@/app/components/ui/Section";
 import SectionHeader from "@/app/components/ui/SectionHeader";
 import ComicCard from "@/app/components/ui/ComicCard";
 
+export const dynamic = "force-dynamic";
+
 export default async function CurrentReviewPage() {
   const currentTasting = await prisma.tastings.findFirst({
-    orderBy: {
-      tasting_date: "desc",
-    },
+    orderBy: [{ created_at: "desc" }, { id: "desc" }],
     include: {
       members: true,
       wines: {

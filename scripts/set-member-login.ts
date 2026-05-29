@@ -3,7 +3,12 @@ import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 
 async function main() {
-  const plainPassword = "Weinclub2026!";
+  const plainPassword = process.env.MEMBER_PASSWORD;
+
+  if (!plainPassword) {
+    throw new Error("MEMBER_PASSWORD muss gesetzt sein.");
+  }
+
   const passwordHash = await bcrypt.hash(plainPassword, 10);
 
   const memberId = 1;
@@ -23,7 +28,6 @@ async function main() {
     display_name: updated.display_name,
     email: updated.email,
     role: updated.role,
-    password: plainPassword,
   });
 }
 

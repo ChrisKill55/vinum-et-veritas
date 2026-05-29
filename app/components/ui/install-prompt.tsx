@@ -14,7 +14,7 @@ export default function InstallPrompt() {
     const dismissed = window.sessionStorage.getItem("install-prompt-dismissed");
 
     if (isIOS && !isStandalone && !dismissed) {
-      setVisible(true);
+      window.requestAnimationFrame(() => setVisible(true));
     }
   }, []);
 

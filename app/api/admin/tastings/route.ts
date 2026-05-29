@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/auth";
 import { prisma } from "@/lib/prisma";
+import { ensureOpenRatingsForTasting } from "@/lib/tasting-ratings";
 
 type IncomingWine = {
   sequence_no: number;
@@ -35,7 +36,7 @@ export async function POST(request: Request) {
       return NextResponse.json(
         { error: "Mitglied nicht gefunden." },
         { status: 403 }
-      );await prisma.wines.createMany
+      );
     }
 
     const role = String(currentMember.role ?? "").toUpperCase();
@@ -122,28 +123,30 @@ export async function POST(request: Request) {
     });
 
     await prisma.wines.createMany({
-  data: wines.map((wine, index) => {
-    const fallbackProducer =
-      wine.producer?.trim() || wine.wine_name?.trim() || "Unbekannt";
+      data: wines.map((wine, index) => {
+        const fallbackProducer =
+          wine.producer?.trim() || wine.wine_name?.trim() || "Unbekannt";
 
-    const fallbackWineName =
-      wine.wine_name?.trim() || wine.producer?.trim() || "Unbekannt";
+        const fallbackWineName =
+          wine.wine_name?.trim() || wine.producer?.trim() || "Unbekannt";
 
-    return {
-      tasting_id: tasting.id,
-      sequence_no: index + 1,
-      producer: fallbackProducer,
-      wine_name: fallbackWineName,
-      vintage: wine.vintage,
-      country: wine.country,
-      region: wine.region,
-      grape_variety: wine.grape_variety,
-      alcohol_pct: wine.alcohol_pct,
-      price_eur: wine.price_eur,
-      comment: wine.comment,
-    };
-  }),
-});
+        return {
+          tasting_id: tasting.id,
+          sequence_no: index + 1,
+          producer: fallbackProducer,
+          wine_name: fallbackWineName,
+          vintage: wine.vintage,
+          country: wine.country,
+          region: wine.region,
+          grape_variety: wine.grape_variety,
+          alcohol_pct: wine.alcohol_pct,
+          price_eur: wine.price_eur,
+          comment: wine.comment,
+        };
+      }),
+    });
+
+    await ensureOpenRatingsForTasting(tasting.id);
 
     return NextResponse.json({
       ok: true,
