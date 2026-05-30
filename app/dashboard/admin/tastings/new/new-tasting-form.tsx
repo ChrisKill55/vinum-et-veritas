@@ -306,7 +306,7 @@ export default function NewTastingForm({ hosts }: { hosts: Host[] }) {
                 type="checkbox"
                 checked={participantMemberIds.includes(host.id)}
                 onChange={() => toggleParticipant(host.id)}
-                className="h-5 w-5"
+                className="h-5 w-5 accent-red-700"
               />
               {host.display_name ?? `Mitglied ${host.id}`}
             </label>
