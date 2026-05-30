@@ -28,8 +28,8 @@ export default function ImpressumPage() {
                   <p>Torsten Yanez</p>
                   <p>Quellenweg 26a</p>
                   <p>46539 Dinslaken</p>
-                  <p>E-Mail: news@christian-kill.de</p>
-                  <p>E-Mail: Helleroberhausen@gmail.com</p>
+                  <p>E-Mail: news[at]christian-kill.de</p>
+                  <p>E-Mail: Helleroberhausen[at]gmail.com</p>
                 </div>
               </section>
 
