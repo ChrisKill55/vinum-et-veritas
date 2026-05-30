@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/auth";
 import { prisma } from "@/lib/prisma";
+import { isPlaceholderWine } from "@/lib/public-wines";
 import HeroSection from "@/app/components/ui/HeroSection";
 import Section from "@/app/components/ui/Section";
 import SectionHeader from "@/app/components/ui/SectionHeader";
@@ -69,10 +70,15 @@ export default async function WineDetailPage({ params }: PageProps) {
 
   const role = String(currentMember?.role ?? "").toUpperCase();
   const isAdmin = role === "ADMIN" || role === "PRESIDENT";
+  const isPlaceholder = isPlaceholderWine(wine);
 
   const isParticipant = currentMember
     ? wine.ratings.some((rating) => rating.member_id === currentMember.id)
     : false;
+
+  if (isPlaceholder && !isAdmin && !isParticipant) {
+    notFound();
+  }
 
   const canUploadImage = Boolean(currentMember) && (isAdmin || isParticipant);
 
@@ -99,6 +105,7 @@ export default async function WineDetailPage({ params }: PageProps) {
   });
 
   const rankedWines = allWines
+    .filter((currentWine) => isAdmin || !isPlaceholderWine(currentWine))
     .map((currentWine) => {
       const values = currentWine.ratings
         .map((rating) =>

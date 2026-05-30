@@ -1,6 +1,7 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/auth";
 import { prisma } from "@/lib/prisma";
+import { isPlaceholderWine } from "@/lib/public-wines";
 import HeroSection from "@/app/components/ui/HeroSection";
 import TopWinesList from "./top-wines-list";
 
@@ -43,6 +44,7 @@ export default async function TopWinesPage({ searchParams }: PageProps) {
   });
 
   const winesWithAverage = wines
+    .filter((wine) => !isPlaceholderWine(wine))
     .map((wine) => {
       const values = wine.ratings
         .map((r) =>

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
+import { isPlaceholderWine } from "@/lib/public-wines";
 import WineGlassRating from "@/app/components/ui/WineGlassRating";
 import ComicCard from "@/app/components/ui/ComicCard";
 export const revalidate = 300;
@@ -40,7 +41,9 @@ export default async function TastingDetailPage({
     notFound();
   }
 
-  const winesWithAverage = tasting.wines.map((wine) => {
+  const visibleWines = tasting.wines.filter((wine) => !isPlaceholderWine(wine));
+
+  const winesWithAverage = visibleWines.map((wine) => {
     const overallValues = wine.ratings
       .map((rating) =>
         rating.overall_score !== null ? Number(rating.overall_score) : null
@@ -109,8 +112,8 @@ export default async function TastingDetailPage({
               </span>
 
               <span className="border-2 border-white bg-white px-3 py-2 text-xs font-black uppercase tracking-[0.22em] text-black">
-                {tasting.wines.length} Wein
-                {tasting.wines.length === 1 ? "" : "e"}
+                {visibleWines.length} Wein
+                {visibleWines.length === 1 ? "" : "e"}
               </span>
             </div>
           </div>

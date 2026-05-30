@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { isPlaceholderWine } from "@/lib/public-wines";
 import HeroSplitSection from "@/app/components/ui/HeroSplitSection";
 import ComicButton from "@/app/components/ui/ComicButton";
 import Section from "@/app/components/ui/Section";
@@ -106,6 +107,7 @@ export default async function Page() {
   ];
 
   const topWines = rankedWines
+  .filter((wine) => !isPlaceholderWine(wine))
   .map((wine) => {
     const validScores = wine.ratings
       .map((rating) =>
@@ -151,7 +153,7 @@ export default async function Page() {
   const tastings = recentTastings.map((t) => ({
     date: new Date(t.tasting_date).toLocaleDateString("de-DE"),
     host: t.members?.display_name ?? "Unbekannt",
-    wines: t.wines.map((w) => {
+    wines: t.wines.filter((wine) => !isPlaceholderWine(wine)).map((w) => {
       const name =
         w.producer === w.wine_name
           ? w.wine_name
@@ -180,7 +182,7 @@ export default async function Page() {
 
   const countryMap = new Map<string, number[]>();
 
-  for (const wine of winesWithRatings) {
+  for (const wine of winesWithRatings.filter((wine) => !isPlaceholderWine(wine))) {
     if (!wine.country) continue;
 
     const scores = wine.ratings
