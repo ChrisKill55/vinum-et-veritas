@@ -23,9 +23,13 @@ export default function ImpressumPage() {
                 </h2>
                 <div className="mt-4 space-y-2 text-base leading-8 text-neutral-700">
                   <p>Christian Kill</p>
+                  <p>Heiko Heller</p>
+                  <p>Stefan Nonnenmacher</p>
+                  <p>Torsten Yanez</p>
                   <p>Quellenweg 26a</p>
                   <p>46539 Dinslaken</p>
                   <p>E-Mail: news@christian-kill.de</p>
+                  <p>E-Mail: Helleroberhausen@gmail.com</p>
                 </div>
               </section>
 
@@ -37,6 +41,21 @@ export default function ImpressumPage() {
                   Diese Website wird privat betrieben. Der dargestellte Weinclub
                   sowie die Inhalte der Seite dienen ausschließlich privaten und
                   nicht gewerblichen Zwecken.
+                </p>
+              </section>
+
+              <section className="border-t-2 border-black pt-8">
+                <h2 className="text-2xl font-black uppercase tracking-tight">
+                  Hinweis zu Weinbewertungen
+                </h2>
+                <p className="mt-4 text-base leading-8 text-neutral-700">
+                  Die auf dieser Website dargestellten Weinbewertungen spiegeln
+                  ausschließlich die persönlichen Eindrücke der Mitglieder des
+                  Weinclubs wider. Sie dienen nicht der Auf- oder Abwertung von
+                  Unternehmen, Weingütern, Herstellern, Händlern oder deren
+                  Produkten. Geschmack ist subjektiv und kann je nach Situation,
+                  Umgebung, Stimmung und Speisenbegleitung unterschiedlich
+                  wahrgenommen werden.
                 </p>
               </section>
 
