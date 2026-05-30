@@ -61,6 +61,21 @@ export default async function AdminTastingReviewsPage({
           ratings: {
             select: {
               member_id: true,
+              participant_id: true,
+              overall_score: true,
+            },
+          },
+        },
+      },
+      tasting_participants: {
+        orderBy: { id: "asc" },
+        include: {
+          members: {
+            select: {
+              id: true,
+              display_name: true,
+              role: true,
+              email: true,
             },
           },
         },
@@ -72,29 +87,16 @@ export default async function AdminTastingReviewsPage({
     notFound();
   }
 
-  const activeMembers = await prisma.members.findMany({
-    where: {
-      is_active: true,
-    },
-    orderBy: {
-      display_name: "asc",
-    },
-    select: {
-      id: true,
-      display_name: true,
-      role: true,
-      email: true,
-    },
-  });
-
   const totalWines = tasting.wines.length;
 
-  const reviewRows = activeMembers.map((member) => {
+  const reviewRows = tasting.tasting_participants.map((participant) => {
     const ratedWineIds = new Set<number>();
 
     tasting.wines.forEach((wine) => {
       const hasRating = wine.ratings.some(
-        (rating) => rating.member_id === member.id
+        (rating) =>
+          rating.participant_id === participant.id &&
+          rating.overall_score !== null
       );
 
       if (hasRating) {
@@ -118,7 +120,7 @@ export default async function AdminTastingReviewsPage({
     );
 
     const body = encodeURIComponent(
-      `Hallo ${member.display_name ?? ""},
+      `Hallo ${participant.members?.display_name ?? participant.guest_name ?? ""},
 
 bitte trage deine Bewertung für das Tasting vom ${new Date(
         tasting.tasting_date
@@ -129,16 +131,20 @@ Vinum et Veritas`
     );
 
     return {
-      memberId: member.id,
-      displayName: member.display_name ?? "Unbekannt",
-      role: member.role ?? null,
-      email: member.email ?? null,
+      participantId: participant.id,
+      displayName:
+        participant.members?.display_name ??
+        participant.guest_name ??
+        "Unbekannt",
+      role: participant.members?.role ?? (participant.guest_name ? "GAST" : null),
+      email: participant.members?.email ?? null,
+      isGuest: participant.member_id === null,
       completedCount,
       totalWines,
       status,
       mailto:
-        member.email != null
-          ? `mailto:${member.email}?subject=${subject}&body=${body}`
+        participant.members?.email != null
+          ? `mailto:${participant.members.email}?subject=${subject}&body=${body}`
           : null,
     };
   });
@@ -244,12 +250,12 @@ Vinum et Veritas`
 
               return (
                 <ComicCard
-                  key={row.memberId}
+                  key={row.participantId}
                   className="relative overflow-hidden px-6 pb-10 pt-6"
                 >
                   <div className="flex items-start justify-between gap-4">
                     <div className="text-xs font-black uppercase tracking-[0.22em] text-red-700">
-                      Mitglied
+                      {row.isGuest ? "Gast" : "Mitglied"}
                     </div>
 
                     <div
@@ -312,7 +318,7 @@ Vinum et Veritas`
 
                   <div className="mt-6 flex flex-wrap gap-3">
                     <Link
-                      href={`/dashboard/admin/tastings/${tasting.id}/reviews/${row.memberId}`}
+                      href={`/dashboard/admin/tastings/${tasting.id}/reviews/${row.participantId}`}
                       className="inline-flex border-2 border-black bg-black px-4 py-3 text-xs font-black uppercase tracking-[0.2em] text-white transition hover:-translate-y-0.5"
                     >
                       Bewertung nachpflegen

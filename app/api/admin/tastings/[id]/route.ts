@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/auth";
 import { prisma } from "@/lib/prisma";
-import { ensureOpenRatingsForTasting } from "@/lib/tasting-ratings";
+import { syncTastingParticipants } from "@/lib/tasting-ratings";
 
 type IncomingWine = {
   id?: number | null;
@@ -64,6 +64,12 @@ export async function PATCH(
 
     const tastingDateRaw = body?.tasting_date;
     const memberId = Number(body?.member_id);
+    const participantMemberIds = Array.isArray(body?.participant_member_ids)
+      ? body.participant_member_ids.map((value: unknown) => Number(value))
+      : [];
+    const guestNames = Array.isArray(body?.guest_names)
+      ? body.guest_names.map((value: unknown) => String(value ?? ""))
+      : [];
     const wines = Array.isArray(body?.wines)
       ? (body.wines as IncomingWine[])
       : [];
@@ -99,6 +105,17 @@ export async function PATCH(
     if (!hostExists) {
       return NextResponse.json(
         { error: "Der ausgewählte Gastgeber existiert nicht." },
+        { status: 400 }
+      );
+    }
+
+    const selectedMemberIds = Array.from(
+      new Set([...participantMemberIds, memberId].filter(Number.isInteger))
+    );
+
+    if (selectedMemberIds.length === 0 && guestNames.length === 0) {
+      return NextResponse.json(
+        { error: "Bitte mindestens einen Teilnehmer auswählen." },
         { status: 400 }
       );
     }
@@ -201,7 +218,10 @@ export async function PATCH(
       }
     }
 
-    await ensureOpenRatingsForTasting(tastingId);
+    await syncTastingParticipants(tastingId, {
+      memberIds: selectedMemberIds,
+      guestNames,
+    });
 
     return NextResponse.json({ ok: true });
   } catch (error) {

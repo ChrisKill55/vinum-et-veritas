@@ -40,9 +40,29 @@ export default async function AdminMemberReviewPage({ params }: PageProps) {
 
   const { id, memberId } = await params;
   const tastingId = Number(id);
-  const targetMemberId = Number(memberId);
+  const participantId = Number(memberId);
 
-  if (Number.isNaN(tastingId) || Number.isNaN(targetMemberId)) {
+  if (Number.isNaN(tastingId) || Number.isNaN(participantId)) {
+    notFound();
+  }
+
+  const participant = await prisma.tasting_participants.findFirst({
+    where: {
+      id: participantId,
+      tasting_id: tastingId,
+    },
+    include: {
+      members: {
+        select: {
+          id: true,
+          display_name: true,
+          email: true,
+        },
+      },
+    },
+  });
+
+  if (!participant) {
     notFound();
   }
 
@@ -55,7 +75,7 @@ export default async function AdminMemberReviewPage({ params }: PageProps) {
         include: {
           ratings: {
             where: {
-              member_id: targetMemberId,
+              participant_id: participant.id,
             },
             take: 1,
           },
@@ -64,16 +84,7 @@ export default async function AdminMemberReviewPage({ params }: PageProps) {
     },
   });
 
-  const targetMember = await prisma.members.findUnique({
-    where: { id: targetMemberId },
-    select: {
-      id: true,
-      display_name: true,
-      email: true,
-    },
-  });
-
-  if (!tasting || !targetMember) {
+  if (!tasting) {
     notFound();
   }
 
@@ -102,10 +113,25 @@ export default async function AdminMemberReviewPage({ params }: PageProps) {
     }
 
     const tastingIdValue = Number(formData.get("tastingId"));
-    const memberIdValue = Number(formData.get("memberId"));
+    const participantIdValue = Number(formData.get("participantId"));
 
-    if (Number.isNaN(tastingIdValue) || Number.isNaN(memberIdValue)) {
+    if (Number.isNaN(tastingIdValue) || Number.isNaN(participantIdValue)) {
       throw new Error("Ungültige IDs.");
+    }
+
+    const participant = await prisma.tasting_participants.findFirst({
+      where: {
+        id: participantIdValue,
+        tasting_id: tastingIdValue,
+      },
+      select: {
+        id: true,
+        member_id: true,
+      },
+    });
+
+    if (!participant) {
+      throw new Error("Teilnehmer nicht gefunden.");
     }
 
     const wines = await prisma.wines.findMany({
@@ -138,9 +164,9 @@ export default async function AdminMemberReviewPage({ params }: PageProps) {
 
       await prisma.ratings.upsert({
         where: {
-          wine_id_member_id: {
+          wine_id_participant_id: {
             wine_id: wine.id,
-            member_id: memberIdValue,
+            participant_id: participant.id,
           },
         },
         update: {
@@ -154,7 +180,8 @@ export default async function AdminMemberReviewPage({ params }: PageProps) {
         },
         create: {
           wine_id: wine.id,
-          member_id: memberIdValue,
+          member_id: participant.member_id,
+          participant_id: participant.id,
           color_score: color,
           smell_score: smell,
           taste_score: taste,
@@ -197,23 +224,25 @@ export default async function AdminMemberReviewPage({ params }: PageProps) {
   return (
     <div className="bg-white text-neutral-950">
       <HeroSection
-        imageSrc="/images/Header_Tasting.webp"
-        imageAlt="Bewertung nachpflegen"
-        badge="Admin"
-        title="Bewertung nachpflegen"
-        description={`Bewertungen für ${targetMember.display_name ?? "Mitglied"} im Tasting vom ${new Date(tasting.tasting_date).toLocaleDateString("de-DE")}.`}
+      imageSrc="/images/Header_Tasting.webp"
+      imageAlt="Bewertung nachpflegen"
+      badge="Admin"
+      title="Bewertung nachpflegen"
+      description={`Bewertungen für ${
+        participant.members?.display_name ?? participant.guest_name ?? "Teilnehmer"
+      } im Tasting vom ${new Date(tasting.tasting_date).toLocaleDateString("de-DE")}.`}
       />
 
       <Section>
         <SectionHeader
           kicker="Verwaltung"
-          title={targetMember.display_name ?? "Mitglied"}
+          title={participant.members?.display_name ?? participant.guest_name ?? "Teilnehmer"}
         />
 
         <AdminMemberReviewForm
           action={saveRatings}
           tastingId={tasting.id}
-          memberId={targetMember.id}
+          participantId={participant.id}
           tastingDate={new Date(tasting.tasting_date).toLocaleDateString("de-DE")}
           hostName={tasting.members?.display_name ?? "Unbekannt"}
           wines={wines}

@@ -19,14 +19,14 @@ type WineReviewItem = {
 export default function AdminMemberReviewForm({
   action,
   tastingId,
-  memberId,
+  participantId,
   tastingDate,
   hostName,
   wines,
 }: {
   action: (formData: FormData) => void;
   tastingId: number;
-  memberId: number;
+  participantId: number;
   tastingDate: string;
   hostName: string;
   wines: WineReviewItem[];
@@ -34,7 +34,11 @@ export default function AdminMemberReviewForm({
   return (
     <form action={action} className="space-y-8">
       <input type="hidden" name="tastingId" value={String(tastingId)} />
-      <input type="hidden" name="memberId" value={String(memberId)} />
+      <input
+        type="hidden"
+        name="participantId"
+        value={String(participantId)}
+      />
 
       <ComicCard className="relative overflow-hidden px-6 pb-8 pt-6">
         <div className="grid gap-6 md:grid-cols-3">

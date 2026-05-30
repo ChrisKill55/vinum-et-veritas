@@ -1,3 +1,6 @@
+import { redirect } from "next/navigation";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import HeroSection from "@/app/components/ui/HeroSection";
 import Section from "@/app/components/ui/Section";
@@ -7,6 +10,25 @@ import ComicCard from "@/app/components/ui/ComicCard";
 export const dynamic = "force-dynamic";
 
 export default async function CurrentReviewPage() {
+  const session = await getServerSession(authOptions);
+
+  if (!session?.user?.email) {
+    redirect("/login");
+  }
+
+  const currentMember = await prisma.members.findUnique({
+    where: {
+      email: session.user.email,
+    },
+    select: {
+      id: true,
+    },
+  });
+
+  if (!currentMember) {
+    redirect("/login");
+  }
+
   const currentTasting = await prisma.tastings.findFirst({
     orderBy: [{ created_at: "desc" }, { id: "desc" }],
     include: {
@@ -15,9 +37,22 @@ export default async function CurrentReviewPage() {
         orderBy: {
           sequence_no: "asc",
         },
+        include: {
+          ratings: {
+            where: {
+              member_id: currentMember.id,
+            },
+            select: {
+              id: true,
+            },
+          },
+        },
       },
     },
   });
+
+  const winesForMember =
+    currentTasting?.wines.filter((wine) => wine.ratings.length > 0) ?? [];
 
   return (
     <div className="bg-white text-neutral-950">
@@ -64,8 +99,22 @@ export default async function CurrentReviewPage() {
               </div>
             </ComicCard>
 
-            <div className="grid gap-6 lg:grid-cols-2">
-              {currentTasting.wines.map((wine) => {
+            {winesForMember.length === 0 ? (
+              <ComicCard className="relative overflow-hidden px-6 py-8">
+                <div className="text-sm font-black uppercase tracking-[0.25em] text-red-700">
+                  Kein Zugriff
+                </div>
+                <h2 className="mt-3 text-2xl font-black uppercase tracking-tight">
+                  Du bist für dieses Tasting nicht als Teilnehmer eingetragen
+                </h2>
+                <p className="mt-4 max-w-2xl text-sm leading-7 text-neutral-700">
+                  Bewertungen sind nur für Mitglieder möglich, die beim Tasting
+                  als Teilnehmer hinterlegt wurden.
+                </p>
+              </ComicCard>
+            ) : (
+              <div className="grid gap-6 lg:grid-cols-2">
+                {winesForMember.map((wine) => {
                 const wineTitle =
                   wine.producer === wine.wine_name
                     ? wine.wine_name
@@ -109,8 +158,9 @@ export default async function CurrentReviewPage() {
                     </div>
                   </ComicCard>
                 );
-              })}
-            </div>
+                })}
+              </div>
+            )}
           </>
         )}
       </Section>

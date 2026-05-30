@@ -37,33 +37,38 @@ model members {
   password_hash String?
   role          String  @default("MEMBER")
 
-  ratings     ratings[]
-  tastings    tastings[]
-  wine_images wine_images[]
+  ratings              ratings[]
+  tastings             tastings[]
+  tasting_participants tasting_participants[]
+  wine_images          wine_images[]
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 model ratings {
-  id               Int          @id @default(autoincrement())
-  wine_id          Int
-  member_id        Int
-  color_score      Decimal?     @db.Decimal(3, 1)
-  smell_score      Decimal?     @db.Decimal(3, 1)
-  taste_score      Decimal?     @db.Decimal(3, 1)
-  finish_score     Decimal?     @db.Decimal(3, 1)
-  overall_score    Decimal?     @db.Decimal(3, 1)
-  calculated_score Decimal?     @db.Decimal(3, 1)
-  points_text      String?
-  review_flag      Boolean      @default(false)
-  review_reason    String?
-  source_import_id Int?
-  created_at       DateTime     @default(now()) @db.Timestamp(6)
-  members          members      @relation(fields: [member_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  import_runs      import_runs? @relation(fields: [source_import_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  wines            wines        @relation(fields: [wine_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  id                   Int                   @id @default(autoincrement())
+  wine_id              Int
+  member_id            Int?
+  participant_id       Int?
+  color_score          Decimal?              @db.Decimal(3, 1)
+  smell_score          Decimal?              @db.Decimal(3, 1)
+  taste_score          Decimal?              @db.Decimal(3, 1)
+  finish_score         Decimal?              @db.Decimal(3, 1)
+  overall_score        Decimal?              @db.Decimal(3, 1)
+  calculated_score     Decimal?              @db.Decimal(3, 1)
+  points_text          String?
+  review_flag          Boolean               @default(false)
+  review_reason        String?
+  source_import_id     Int?
+  created_at           DateTime              @default(now()) @db.Timestamp(6)
+  members              members?              @relation(fields: [member_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  tasting_participants tasting_participants? @relation(fields: [participant_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  import_runs          import_runs?          @relation(fields: [source_import_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  wines                wines                 @relation(fields: [wine_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
   @@unique([wine_id, member_id], map: "ratings_unique_member_per_wine")
+  @@unique([wine_id, participant_id], map: "ratings_unique_participant_per_wine")
   @@index([member_id], map: "idx_ratings_member")
+  @@index([participant_id], map: "idx_ratings_participant")
   @@index([wine_id], map: "idx_ratings_wine")
 }
 
@@ -77,16 +82,34 @@ model review_items {
 }
 
 model tastings {
-  id               Int          @id @default(autoincrement())
-  tasting_date     DateTime     @db.Date
-  host_member_id   Int
-  source_import_id Int?
-  created_at       DateTime     @default(now()) @db.Timestamp(6)
-  members          members      @relation(fields: [host_member_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  import_runs      import_runs? @relation(fields: [source_import_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  wines            wines[]
+  id                   Int                    @id @default(autoincrement())
+  tasting_date         DateTime               @db.Date
+  host_member_id       Int
+  source_import_id     Int?
+  created_at           DateTime               @default(now()) @db.Timestamp(6)
+  members              members                @relation(fields: [host_member_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  import_runs          import_runs?           @relation(fields: [source_import_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  tasting_participants tasting_participants[]
+  wines                wines[]
 
   @@index([tasting_date], map: "idx_tastings_date")
+}
+
+model tasting_participants {
+  id         Int      @id @default(autoincrement())
+  tasting_id Int
+  member_id  Int?
+  guest_name String?
+  created_at DateTime @default(now()) @db.Timestamp(6)
+
+  tastings tastings  @relation(fields: [tasting_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  members  members?  @relation(fields: [member_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  ratings  ratings[]
+
+  @@unique([tasting_id, member_id], map: "tasting_participants_unique_member")
+  @@unique([tasting_id, guest_name], map: "tasting_participants_unique_guest")
+  @@index([tasting_id], map: "idx_tasting_participants_tasting")
+  @@index([member_id], map: "idx_tasting_participants_member")
 }
 
 model wines {

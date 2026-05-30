@@ -28,6 +28,8 @@ type EditTastingFormProps = {
   initialDate: string;
   initialMemberId: number;
   hosts?: HostOption[];
+  initialParticipantMemberIds?: number[];
+  initialGuestNames?: string[];
   winesInitial?: WineFormItem[];
 };
 
@@ -51,6 +53,8 @@ export default function EditTastingForm({
   initialDate,
   initialMemberId,
   hosts = [],
+  initialParticipantMemberIds = [],
+  initialGuestNames = [],
   winesInitial = [],
 }: EditTastingFormProps) {
   const router = useRouter();
@@ -60,6 +64,14 @@ export default function EditTastingForm({
 
   const [tastingDate, setTastingDate] = useState(initialDate);
   const [memberId, setMemberId] = useState(String(initialMemberId));
+  const [participantMemberIds, setParticipantMemberIds] = useState<number[]>(
+    initialParticipantMemberIds.length > 0
+      ? initialParticipantMemberIds
+      : initialMemberId
+        ? [initialMemberId]
+        : []
+  );
+  const [guestNames, setGuestNames] = useState<string[]>(initialGuestNames);
   const [wines, setWines] = useState<WineFormItem[]>(normalizedInitialWines);
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState("");
@@ -98,6 +110,28 @@ export default function EditTastingForm({
     );
   }
 
+  function toggleParticipant(memberId: number) {
+    setParticipantMemberIds((prev) =>
+      prev.includes(memberId)
+        ? prev.filter((id) => id !== memberId)
+        : [...prev, memberId]
+    );
+  }
+
+  function addGuest() {
+    setGuestNames((prev) => [...prev, ""]);
+  }
+
+  function removeGuest(index: number) {
+    setGuestNames((prev) => prev.filter((_, i) => i !== index));
+  }
+
+  function updateGuest(index: number, value: string) {
+    setGuestNames((prev) =>
+      prev.map((guestName, i) => (i === index ? value : guestName))
+    );
+  }
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
@@ -113,6 +147,8 @@ export default function EditTastingForm({
         body: JSON.stringify({
           tasting_date: tastingDate,
           member_id: Number(memberId),
+          participant_member_ids: participantMemberIds,
+          guest_names: guestNames.map((name) => name.trim()).filter(Boolean),
           wines: wines.map((wine, index) => ({
             id: wine.id ?? null,
             sequence_no: index + 1,
@@ -174,7 +210,15 @@ export default function EditTastingForm({
 
             <select
               value={memberId}
-              onChange={(e) => setMemberId(e.target.value)}
+              onChange={(e) => {
+                setMemberId(e.target.value);
+                const nextHostId = Number(e.target.value);
+                if (Number.isInteger(nextHostId)) {
+                  setParticipantMemberIds((prev) =>
+                    prev.includes(nextHostId) ? prev : [...prev, nextHostId]
+                  );
+                }
+              }}
               className="w-full border-2 border-black px-4 py-3"
             >
               {hosts.map((host) => (
@@ -184,6 +228,81 @@ export default function EditTastingForm({
               ))}
             </select>
           </div>
+        </div>
+      </ComicCard>
+
+      <ComicCard className="px-6 pb-8 pt-6">
+        <div className="mb-6">
+          <div className="mb-2 text-sm font-black uppercase tracking-[0.3em] text-red-700">
+            Teilnehmer
+          </div>
+          <h2 className="text-3xl font-black uppercase tracking-tight">
+            Anwesende Personen
+          </h2>
+          <p className="mt-3 text-sm leading-6 text-neutral-700">
+            Nur ausgewählte Mitglieder erhalten offene Bewertungen. Gäste
+            werden ausschließlich im Admin-Bereich nachgepflegt.
+          </p>
+        </div>
+
+        <div className="grid gap-3 md:grid-cols-2">
+          {hosts.map((host) => (
+            <label
+              key={host.id}
+              className="flex items-center gap-3 border-2 border-black bg-white px-4 py-3 text-sm font-black uppercase tracking-[0.12em]"
+            >
+              <input
+                type="checkbox"
+                checked={participantMemberIds.includes(host.id)}
+                onChange={() => toggleParticipant(host.id)}
+                className="h-5 w-5"
+              />
+              {host.display_name ?? `Mitglied ${host.id}`}
+            </label>
+          ))}
+        </div>
+
+        <div className="mt-8 border-t-2 border-black pt-6">
+          <div className="mb-4 flex items-center justify-between gap-4">
+            <h3 className="text-xl font-black uppercase tracking-tight">
+              Gäste
+            </h3>
+
+            <button
+              type="button"
+              onClick={addGuest}
+              className="border-2 border-black bg-white px-4 py-2 text-xs font-black uppercase tracking-[0.2em] transition hover:-translate-y-0.5"
+            >
+              Gast hinzufügen
+            </button>
+          </div>
+
+          {guestNames.length === 0 ? (
+            <p className="text-sm leading-6 text-neutral-700">
+              Keine Gäste eingetragen.
+            </p>
+          ) : (
+            <div className="space-y-3">
+              {guestNames.map((guestName, index) => (
+                <div key={index} className="flex gap-3">
+                  <input
+                    type="text"
+                    value={guestName}
+                    onChange={(e) => updateGuest(index, e.target.value)}
+                    className="min-w-0 flex-1 border-2 border-black bg-white px-4 py-3 text-base focus:outline-none"
+                    placeholder="Name des Gasts"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => removeGuest(index)}
+                    className="border-2 border-black bg-white px-4 py-2 text-xs font-black uppercase tracking-[0.2em]"
+                  >
+                    Entfernen
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </ComicCard>
 

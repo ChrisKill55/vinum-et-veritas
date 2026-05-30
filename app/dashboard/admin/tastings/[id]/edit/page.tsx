@@ -50,6 +50,13 @@ export default async function EditTastingPage({ params }: PageProps) {
         orderBy: { sequence_no: "asc" },
       },
       members: true,
+      tasting_participants: {
+        orderBy: { id: "asc" },
+        select: {
+          member_id: true,
+          guest_name: true,
+        },
+      },
     },
   });
 
@@ -104,6 +111,12 @@ export default async function EditTastingPage({ params }: PageProps) {
             id: host.id,
             display_name: host.display_name ?? "Unbekannt",
           }))}
+          initialParticipantMemberIds={tasting.tasting_participants
+            .map((participant) => participant.member_id)
+            .filter((id): id is number => id !== null)}
+          initialGuestNames={tasting.tasting_participants
+            .map((participant) => participant.guest_name)
+            .filter((name): name is string => Boolean(name))}
           winesInitial={winesInitial}
         />
       </Section>
