@@ -24,7 +24,9 @@ export default function ImpressumPage() {
                 <div className="mt-4 space-y-2 text-base leading-8 text-neutral-700">
                   <p>Christian Kill</p>
                   <p>Heiko Heller</p>
+                  <p>Niels Jeß</p>
                   <p>Stefan Nonnenmacher</p>
+                  <p>Thorsten Drewes</p>
                   <p>Torsten Yanez</p>
                   <p>Quellenweg 26a</p>
                   <p>46539 Dinslaken</p>
