@@ -46,18 +46,47 @@ export default function DatenschutzPage() {
                   3. Hosting und Server-Logfiles
                 </h2>
                 <p className="mt-4 text-base leading-8 text-neutral-700">
-                  Beim Aufruf dieser Website können durch den Hosting-Anbieter
-                  technisch erforderliche Daten verarbeitet werden. Dazu können
-                  insbesondere IP-Adresse, Datum und Uhrzeit des Zugriffs,
-                  Browsertyp, Betriebssystem, Referrer-URL sowie aufgerufene
-                  Seiten gehören. Die Verarbeitung erfolgt zum Zweck der
-                  technischen Bereitstellung und Sicherheit der Website.
+                  Diese Website wird über Vercel bereitgestellt. Anbieter ist
+                  Vercel Inc., 340 S Lemon Ave #4133, Walnut, CA 91789, USA.
+                  Beim Aufruf der Website verarbeitet Vercel technisch
+                  erforderliche Zugriffsdaten. Dazu können insbesondere
+                  IP-Adresse, Datum und Uhrzeit des Zugriffs, Browsertyp,
+                  Betriebssystem, Referrer-URL sowie aufgerufene Seiten
+                  gehören. Die Verarbeitung erfolgt zum Zweck der technischen
+                  Bereitstellung, Auslieferung und Sicherheit der Website.
+                </p>
+                <p className="mt-4 text-base leading-8 text-neutral-700">
+                  Die Domain, DNS-Verwaltung und E-Mail-Dienste werden über
+                  IONOS SE, Elgendorfer Str. 57, 56410 Montabaur, Deutschland,
+                  bereitgestellt. IONOS ist nicht der technische Hoster der
+                  Website-Inhalte, kann jedoch im Rahmen von Domain-, DNS- und
+                  E-Mail-Diensten technische Daten verarbeiten.
                 </p>
               </section>
 
               <section className="border-t-2 border-black pt-8">
                 <h2 className="text-2xl font-black uppercase tracking-tight">
-                  4. Nutzung des internen Mitgliederbereichs
+                  4. Datenbank und Bildspeicherung
+                </h2>
+                <p className="mt-4 text-base leading-8 text-neutral-700">
+                  Zur Speicherung der Website-Daten wird eine PostgreSQL-
+                  Datenbank bei Neon verwendet. Anbieter ist Neon, Inc.,
+                  548 Market St PMB 98174, San Francisco, CA 94104-5401, USA.
+                  In der Datenbank werden insbesondere Inhalte zu Tastings,
+                  Weinen, Bewertungen, Mitgliedskonten und Login-Daten
+                  gespeichert, soweit dies für den Betrieb der Website und des
+                  internen Mitgliederbereichs erforderlich ist.
+                </p>
+                <p className="mt-4 text-base leading-8 text-neutral-700">
+                  Von Mitgliedern hochgeladene Bilder können über Vercel Blob
+                  gespeichert und öffentlich ausgeliefert werden, soweit sie als
+                  Bildinhalt der Website vorgesehen sind.
+                </p>
+              </section>
+
+              <section className="border-t-2 border-black pt-8">
+                <h2 className="text-2xl font-black uppercase tracking-tight">
+                  5. Nutzung des internen Mitgliederbereichs
                 </h2>
                 <p className="mt-4 text-base leading-8 text-neutral-700">
                   Im internen Mitgliederbereich werden personenbezogene Daten
@@ -75,20 +104,45 @@ export default function DatenschutzPage() {
 
               <section className="border-t-2 border-black pt-8">
                 <h2 className="text-2xl font-black uppercase tracking-tight">
-                  5. Cookies und Sessions
+                  6. Cookies und Sessions
                 </h2>
                 <p className="mt-4 text-base leading-8 text-neutral-700">
-                  Diese Website kann technisch notwendige Cookies oder ähnliche
-                  Speichertechnologien verwenden, insbesondere um Logins,
-                  Sitzungen und sicherheitsrelevante Funktionen bereitzustellen.
-                  Solche technisch erforderlichen Cookies dienen dem Betrieb der
-                  Website.
+                  Diese Website verwendet technisch notwendige Cookies oder
+                  ähnliche Speichertechnologien, insbesondere um Logins,
+                  Sitzungen, CSRF-Schutz und sicherheitsrelevante Funktionen
+                  bereitzustellen. Solche technisch erforderlichen Cookies
+                  dienen dem Betrieb der Website und werden nicht zu
+                  Werbe- oder Trackingzwecken eingesetzt.
                 </p>
               </section>
 
               <section className="border-t-2 border-black pt-8">
                 <h2 className="text-2xl font-black uppercase tracking-tight">
-                  6. Keine Weitergabe zu Werbezwecken
+                  7. Schriften und externe Inhalte
+                </h2>
+                <p className="mt-4 text-base leading-8 text-neutral-700">
+                  Auf dieser Website verwendete Schriften werden lokal über die
+                  Website ausgeliefert. Beim Aufruf der Seiten wird keine
+                  Verbindung zu Google Fonts hergestellt. Externe Karten,
+                  Videos, Social-Media-Plugins oder Werbenetzwerke sind nicht
+                  eingebunden.
+                </p>
+              </section>
+
+              <section className="border-t-2 border-black pt-8">
+                <h2 className="text-2xl font-black uppercase tracking-tight">
+                  8. Keine Analyse- oder Marketingdienste
+                </h2>
+                <p className="mt-4 text-base leading-8 text-neutral-700">
+                  Es werden keine Analyse- oder Marketingdienste wie Google
+                  Analytics, Meta Pixel oder vergleichbare Trackingdienste
+                  eingesetzt.
+                </p>
+              </section>
+
+              <section className="border-t-2 border-black pt-8">
+                <h2 className="text-2xl font-black uppercase tracking-tight">
+                  9. Keine Weitergabe zu Werbezwecken
                 </h2>
                 <p className="mt-4 text-base leading-8 text-neutral-700">
                   Eine Weitergabe personenbezogener Daten an Dritte zu
@@ -101,7 +155,7 @@ export default function DatenschutzPage() {
 
               <section className="border-t-2 border-black pt-8">
                 <h2 className="text-2xl font-black uppercase tracking-tight">
-                  7. Speicherdauer
+                  10. Speicherdauer
                 </h2>
                 <p className="mt-4 text-base leading-8 text-neutral-700">
                   Personenbezogene Daten werden nur so lange gespeichert, wie
@@ -112,7 +166,7 @@ export default function DatenschutzPage() {
 
               <section className="border-t-2 border-black pt-8">
                 <h2 className="text-2xl font-black uppercase tracking-tight">
-                  8. Rechte betroffener Personen
+                  11. Rechte betroffener Personen
                 </h2>
                 <p className="mt-4 text-base leading-8 text-neutral-700">
                   Betroffene Personen haben im Rahmen der gesetzlichen
@@ -129,7 +183,7 @@ export default function DatenschutzPage() {
 
               <section className="border-t-2 border-black pt-8">
                 <h2 className="text-2xl font-black uppercase tracking-tight">
-                  9. Kontakt
+                  12. Kontakt
                 </h2>
                 <p className="mt-4 text-base leading-8 text-neutral-700">
                   Bei Fragen zum Datenschutz kann Kontakt aufgenommen werden
@@ -141,7 +195,7 @@ export default function DatenschutzPage() {
 
               <section className="border-t-2 border-black pt-8">
                 <h2 className="text-2xl font-black uppercase tracking-tight">
-                  10. Stand
+                  13. Stand
                 </h2>
                 <p className="mt-4 text-base leading-8 text-neutral-700">
                   Diese Datenschutzerklärung gilt für den aktuellen Stand dieser
