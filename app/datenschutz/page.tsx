@@ -53,14 +53,18 @@ export default function DatenschutzPage() {
                   IP-Adresse, Datum und Uhrzeit des Zugriffs, Browsertyp,
                   Betriebssystem, Referrer-URL sowie aufgerufene Seiten
                   gehören. Die Verarbeitung erfolgt zum Zweck der technischen
-                  Bereitstellung, Auslieferung und Sicherheit der Website.
+                  Bereitstellung, Auslieferung und Sicherheit der Website auf
+                  Grundlage von Art. 6 Abs. 1 lit. f DSGVO. Das berechtigte
+                  Interesse liegt in einem sicheren und zuverlässigen Betrieb
+                  der Website.
                 </p>
                 <p className="mt-4 text-base leading-8 text-neutral-700">
                   Die Domain, DNS-Verwaltung und E-Mail-Dienste werden über
                   IONOS SE, Elgendorfer Str. 57, 56410 Montabaur, Deutschland,
                   bereitgestellt. IONOS ist nicht der technische Hoster der
                   Website-Inhalte, kann jedoch im Rahmen von Domain-, DNS- und
-                  E-Mail-Diensten technische Daten verarbeiten.
+                  E-Mail-Diensten technische Daten verarbeiten. Die Verarbeitung
+                  erfolgt auf Grundlage von Art. 6 Abs. 1 lit. f DSGVO.
                 </p>
               </section>
 
@@ -75,12 +79,18 @@ export default function DatenschutzPage() {
                   In der Datenbank werden insbesondere Inhalte zu Tastings,
                   Weinen, Bewertungen, Mitgliedskonten und Login-Daten
                   gespeichert, soweit dies für den Betrieb der Website und des
-                  internen Mitgliederbereichs erforderlich ist.
+                  internen Mitgliederbereichs erforderlich ist. Die Verarbeitung
+                  erfolgt je nach Nutzung auf Grundlage von Art. 6 Abs. 1
+                  lit. b DSGVO, soweit sie für die Bereitstellung des
+                  Mitgliederbereichs erforderlich ist, sowie ergänzend auf
+                  Grundlage von Art. 6 Abs. 1 lit. f DSGVO.
                 </p>
                 <p className="mt-4 text-base leading-8 text-neutral-700">
                   Von Mitgliedern hochgeladene Bilder können über Vercel Blob
                   gespeichert und öffentlich ausgeliefert werden, soweit sie als
-                  Bildinhalt der Website vorgesehen sind.
+                  Bildinhalt der Website vorgesehen sind. Die Verarbeitung
+                  erfolgt auf Grundlage von Art. 6 Abs. 1 lit. b DSGVO oder
+                  Art. 6 Abs. 1 lit. f DSGVO.
                 </p>
               </section>
 
@@ -98,7 +108,11 @@ export default function DatenschutzPage() {
                 <p className="mt-4 text-base leading-8 text-neutral-700">
                   Hierzu können insbesondere Name, E-Mail-Adresse,
                   Login-Informationen sowie von Mitgliedern erfasste Bewertungen
-                  und clubinterne Inhalte gehören.
+                  und clubinterne Inhalte gehören. Die Verarbeitung erfolgt auf
+                  Grundlage von Art. 6 Abs. 1 lit. b DSGVO, soweit sie für die
+                  Nutzung des Mitgliederbereichs erforderlich ist, sowie auf
+                  Grundlage von Art. 6 Abs. 1 lit. f DSGVO zur Verwaltung und
+                  Absicherung der internen Clubfunktionen.
                 </p>
               </section>
 
@@ -112,7 +126,9 @@ export default function DatenschutzPage() {
                   Sitzungen, CSRF-Schutz und sicherheitsrelevante Funktionen
                   bereitzustellen. Solche technisch erforderlichen Cookies
                   dienen dem Betrieb der Website und werden nicht zu
-                  Werbe- oder Trackingzwecken eingesetzt.
+                  Werbe- oder Trackingzwecken eingesetzt. Die Verarbeitung
+                  erfolgt auf Grundlage von § 25 Abs. 2 TTDSG beziehungsweise
+                  TDDDG sowie Art. 6 Abs. 1 lit. f DSGVO.
                 </p>
               </section>
 
@@ -142,7 +158,46 @@ export default function DatenschutzPage() {
 
               <section className="border-t-2 border-black pt-8">
                 <h2 className="text-2xl font-black uppercase tracking-tight">
-                  9. Keine Weitergabe zu Werbezwecken
+                  9. Rechtsgrundlagen der Verarbeitung
+                </h2>
+                <p className="mt-4 text-base leading-8 text-neutral-700">
+                  Soweit personenbezogene Daten zur technischen Bereitstellung,
+                  Sicherheit, Fehleranalyse und Stabilität der Website
+                  verarbeitet werden, erfolgt dies auf Grundlage von Art. 6
+                  Abs. 1 lit. f DSGVO. Das berechtigte Interesse liegt im
+                  sicheren, stabilen und nutzbaren Betrieb der Website.
+                </p>
+                <p className="mt-4 text-base leading-8 text-neutral-700">
+                  Soweit personenbezogene Daten für den internen
+                  Mitgliederbereich, Login, Bewertungen, Bilduploads oder
+                  clubinterne Funktionen erforderlich sind, erfolgt die
+                  Verarbeitung auf Grundlage von Art. 6 Abs. 1 lit. b DSGVO
+                  beziehungsweise Art. 6 Abs. 1 lit. f DSGVO. Soweit gesetzliche
+                  Pflichten bestehen, erfolgt die Verarbeitung auf Grundlage von
+                  Art. 6 Abs. 1 lit. c DSGVO.
+                </p>
+              </section>
+
+              <section className="border-t-2 border-black pt-8">
+                <h2 className="text-2xl font-black uppercase tracking-tight">
+                  10. Drittlandübermittlung
+                </h2>
+                <p className="mt-4 text-base leading-8 text-neutral-700">
+                  Bei der Nutzung von Vercel und Neon kann eine Verarbeitung
+                  personenbezogener Daten in den USA oder durch Anbieter mit
+                  Sitz in den USA erfolgen. Eine solche Verarbeitung erfolgt,
+                  soweit erforderlich, auf Grundlage geeigneter Garantien im
+                  Sinne der Art. 44 ff. DSGVO, insbesondere auf Grundlage von
+                  Standardvertragsklauseln der Europäischen Kommission und/oder
+                  auf Grundlage einer Zertifizierung nach dem EU-US Data Privacy
+                  Framework, soweit der jeweilige Anbieter entsprechend
+                  zertifiziert ist.
+                </p>
+              </section>
+
+              <section className="border-t-2 border-black pt-8">
+                <h2 className="text-2xl font-black uppercase tracking-tight">
+                  11. Keine Weitergabe zu Werbezwecken
                 </h2>
                 <p className="mt-4 text-base leading-8 text-neutral-700">
                   Eine Weitergabe personenbezogener Daten an Dritte zu
@@ -155,7 +210,7 @@ export default function DatenschutzPage() {
 
               <section className="border-t-2 border-black pt-8">
                 <h2 className="text-2xl font-black uppercase tracking-tight">
-                  10. Speicherdauer
+                  12. Speicherdauer
                 </h2>
                 <p className="mt-4 text-base leading-8 text-neutral-700">
                   Personenbezogene Daten werden nur so lange gespeichert, wie
@@ -166,7 +221,7 @@ export default function DatenschutzPage() {
 
               <section className="border-t-2 border-black pt-8">
                 <h2 className="text-2xl font-black uppercase tracking-tight">
-                  11. Rechte betroffener Personen
+                  13. Rechte betroffener Personen
                 </h2>
                 <p className="mt-4 text-base leading-8 text-neutral-700">
                   Betroffene Personen haben im Rahmen der gesetzlichen
@@ -183,7 +238,7 @@ export default function DatenschutzPage() {
 
               <section className="border-t-2 border-black pt-8">
                 <h2 className="text-2xl font-black uppercase tracking-tight">
-                  12. Kontakt
+                  14. Kontakt
                 </h2>
                 <p className="mt-4 text-base leading-8 text-neutral-700">
                   Bei Fragen zum Datenschutz kann Kontakt aufgenommen werden
@@ -195,7 +250,7 @@ export default function DatenschutzPage() {
 
               <section className="border-t-2 border-black pt-8">
                 <h2 className="text-2xl font-black uppercase tracking-tight">
-                  13. Stand
+                  15. Stand
                 </h2>
                 <p className="mt-4 text-base leading-8 text-neutral-700">
                   Diese Datenschutzerklärung gilt für den aktuellen Stand dieser
