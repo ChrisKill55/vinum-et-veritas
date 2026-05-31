@@ -4,7 +4,10 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { isPlaceholderWine } from "@/lib/public-wines";
-import { getWineDisplayName } from "@/lib/wine-labels";
+import {
+  getWineDisplayName,
+  getWineDisplayNameWithVintage,
+} from "@/lib/wine-labels";
 import HeroSection from "@/app/components/ui/HeroSection";
 import Section from "@/app/components/ui/Section";
 import SectionHeader from "@/app/components/ui/SectionHeader";
@@ -140,6 +143,7 @@ export default async function WineDetailPage({ params }: PageProps) {
   const primaryImage = wine.wine_images[0] ?? null;
 
   const wineLabel = getWineDisplayName(wine);
+  const wineLabelWithVintage = getWineDisplayNameWithVintage(wine);
 
   return (
     <div className="bg-white text-neutral-950">
@@ -147,14 +151,14 @@ export default async function WineDetailPage({ params }: PageProps) {
         imageSrc="/images/Header_Tasting.webp"
         imageAlt={wineLabel || "Wein-Detail"}
         badge="Weinprofil"
-        title={[wineLabel, wine.vintage].filter(Boolean).join(" ")}
+        title={wineLabelWithVintage || "Unbekannter Wein"}
         description="Detailseite mit Weinprofil, Bewertungen, Gruppenstatement und Tasting-Zuordnung."
       />
 
       <Section>
         <SectionHeader
           kicker="Weinprofil"
-          title={wineLabel || "Unbekannter Wein"}
+          title={wineLabelWithVintage || "Unbekannter Wein"}
         />
 
         <div className="grid gap-6 lg:grid-cols-2">
