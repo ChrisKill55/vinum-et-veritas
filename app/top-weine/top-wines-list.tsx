@@ -4,7 +4,6 @@ import { useState } from "react";
 import ComicCard from "@/app/components/ui/ComicCard";
 import WineGlassRating from "@/app/components/ui/WineGlassRating";
 import Link from "next/link";
-import { getWineDisplayName } from "@/lib/wine-labels";
 
 type TopWineItem = {
   id: number;
@@ -24,6 +23,20 @@ type TopWinesListProps = {
 };
 
 const PAGE_SIZE = 12;
+
+function getTopWineDisplayName(wine: TopWineItem) {
+  const wineName = wine.wine_name?.trim();
+  const producer = wine.producer?.trim();
+  const wineNameWithVintage = [wineName, wine.vintage]
+    .filter(Boolean)
+    .join(" ");
+
+  if (wineName && producer && wineName === producer) {
+    return wineNameWithVintage;
+  }
+
+  return [wineNameWithVintage, producer].filter(Boolean).join(" | ");
+}
 
 export default function TopWinesList({
   initialWines,
@@ -238,7 +251,7 @@ export default function TopWinesList({
 
       <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
         {wines.map((wine, index) => {
-          const wineLabel = getWineDisplayName(wine);
+          const wineLabel = getTopWineDisplayName(wine);
 
           return (
             <ComicCard
@@ -257,7 +270,7 @@ export default function TopWinesList({
               </div>
 
               <h3 className="mt-3 break-words text-2xl font-black uppercase leading-tight">
-                {[wineLabel, wine.vintage].filter(Boolean).join(" ")}
+                {wineLabel}
               </h3>
 
               <div className="mt-4 text-sm text-neutral-600">
