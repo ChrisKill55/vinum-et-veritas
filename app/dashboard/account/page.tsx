@@ -49,8 +49,8 @@ export default async function AccountPage() {
       <Section>
         <SectionHeader kicker="Zugang" title={`Hallo ${memberName}`} />
 
-        <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(320px,420px)]">
-          <ComicCard className="px-6 py-6 md:px-8 md:py-8">
+        <div className="grid gap-6 md:grid-cols-2">
+          <ComicCard className="relative overflow-hidden px-6 pb-12 pt-6">
             <div className="text-xs font-black uppercase tracking-[0.22em] text-red-700">
               Konto
             </div>
@@ -70,8 +70,16 @@ export default async function AccountPage() {
             </div>
           </ComicCard>
 
-          <ComicCard className="px-6 py-6 md:px-8 md:py-8">
-            <PasswordForm />
+          <ComicCard className="relative overflow-hidden px-6 pb-12 pt-6">
+            <div className="text-xs font-black uppercase tracking-[0.22em] text-red-700">
+              Passwort
+            </div>
+            <h2 className="mt-3 text-3xl font-black uppercase leading-tight">
+              Zugangsdaten
+            </h2>
+            <div className="mt-6">
+              <PasswordForm />
+            </div>
           </ComicCard>
         </div>
       </Section>
