@@ -2,7 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { isPlaceholderWine } from "@/lib/public-wines";
-import { getWineDisplayName } from "@/lib/wine-labels";
+import { getWineDisplayNameWithVintage } from "@/lib/wine-labels";
 import WineGlassRating from "@/app/components/ui/WineGlassRating";
 import ComicCard from "@/app/components/ui/ComicCard";
 export const revalidate = 300;
@@ -144,7 +144,7 @@ export default async function TastingDetailPage({
                   wine.averageOverall !== null &&
                   wine.averageOverall === highestAverage;
 
-                const wineLabel = getWineDisplayName(wine);
+                const wineLabel = getWineDisplayNameWithVintage(wine);
 
                 return (
                 <Link
@@ -159,7 +159,7 @@ export default async function TastingDetailPage({
     </div>
 
     <h3 className="mt-3 break-words text-2xl font-black uppercase leading-tight">
-      {[wineLabel, wine.vintage].filter(Boolean).join(" ")}
+      {wineLabel}
     </h3>
 
     <div className="mt-4 grid grid-cols-[1fr_auto] gap-6">
