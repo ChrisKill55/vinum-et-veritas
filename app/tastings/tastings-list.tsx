@@ -163,10 +163,6 @@ export default function TastingsList({
                           {tasting.wineCount === 1 ? "" : "e"}
                         </div>
                       </div>
-
-                     <p className="mt-5 max-w-3xl text-sm leading-7 text-neutral-500">
-                      Zu diesem Tasting sind aktuell keine zusätzlichen Informationen hinterlegt.
-                    </p> 
                     </div>
 
                     <div className="shrink-0">
