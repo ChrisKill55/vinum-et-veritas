@@ -1,6 +1,9 @@
 import { prisma } from "@/lib/prisma";
 import { isPlaceholderWine } from "@/lib/public-wines";
-import { getWineDisplayName } from "@/lib/wine-labels";
+import {
+  getWineDisplayName,
+  getWineDisplayNameWithVintage,
+} from "@/lib/wine-labels";
 import HeroSplitSection from "@/app/components/ui/HeroSplitSection";
 import ComicButton from "@/app/components/ui/ComicButton";
 import Section from "@/app/components/ui/Section";
@@ -152,11 +155,9 @@ export default async function Page() {
   const tastings = recentTastings.map((t) => ({
     date: new Date(t.tasting_date).toLocaleDateString("de-DE"),
     host: t.members?.display_name ?? "Unbekannt",
-    wines: t.wines.filter((wine) => !isPlaceholderWine(wine)).map((w) => {
-      const name = getWineDisplayName(w);
-
-      return [name, w.vintage].filter(Boolean).join(" ");
-    }),
+    wines: t.wines
+      .filter((wine) => !isPlaceholderWine(wine))
+      .map((wine) => getWineDisplayNameWithVintage(wine)),
   }));
 
   const memberCards = members.map((member) => {
