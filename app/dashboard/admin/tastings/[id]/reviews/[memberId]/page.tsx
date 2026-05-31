@@ -6,6 +6,7 @@ import HeroSection from "@/app/components/ui/HeroSection";
 import Section from "@/app/components/ui/Section";
 import SectionHeader from "@/app/components/ui/SectionHeader";
 import AdminMemberReviewForm from "./review-form";
+import { getWineDisplayName } from "@/lib/wine-labels";
 
 type PageProps = {
   params: Promise<{
@@ -200,10 +201,7 @@ export default async function AdminMemberReviewPage({ params }: PageProps) {
   const wines = tasting.wines.map((wine) => {
     const rating = wine.ratings[0] ?? null;
 
-    const wineTitle =
-      wine.producer === wine.wine_name
-        ? wine.wine_name
-        : [wine.producer, wine.wine_name].filter(Boolean).join(" ");
+    const wineTitle = getWineDisplayName(wine);
 
     return {
       id: wine.id,

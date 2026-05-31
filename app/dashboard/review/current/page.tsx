@@ -6,6 +6,7 @@ import HeroSection from "@/app/components/ui/HeroSection";
 import Section from "@/app/components/ui/Section";
 import SectionHeader from "@/app/components/ui/SectionHeader";
 import ComicCard from "@/app/components/ui/ComicCard";
+import { getWineDisplayName } from "@/lib/wine-labels";
 
 export const dynamic = "force-dynamic";
 
@@ -115,10 +116,7 @@ export default async function CurrentReviewPage() {
             ) : (
               <div className="grid gap-6 lg:grid-cols-2">
                 {winesForMember.map((wine) => {
-                const wineTitle =
-                  wine.producer === wine.wine_name
-                    ? wine.wine_name
-                    : [wine.producer, wine.wine_name].filter(Boolean).join(" ");
+                const wineTitle = getWineDisplayName(wine);
 
                 return (
                   <ComicCard

@@ -8,6 +8,7 @@ import Section from "@/app/components/ui/Section";
 import SectionHeader from "@/app/components/ui/SectionHeader";
 import ComicCard from "@/app/components/ui/ComicCard";
 import WineGlassRating from "@/app/components/ui/WineGlassRating";
+import { getWineDisplayName } from "@/lib/wine-labels";
 
 export default async function MyRatingsPage() {
   const session = await getServerSession(authOptions);
@@ -88,10 +89,7 @@ export default async function MyRatingsPage() {
             {ratings.map((rating) => {
               const wine = rating.wines;
 
-              const wineTitle =
-                wine.producer === wine.wine_name
-                  ? wine.wine_name
-                  : [wine.producer, wine.wine_name].filter(Boolean).join(" ");
+              const wineTitle = getWineDisplayName(wine);
 
               const tastingDate = wine.tastings?.tasting_date
                 ? new Date(wine.tastings.tasting_date).toLocaleDateString("de-DE")

@@ -8,6 +8,7 @@ import Section from "@/app/components/ui/Section";
 import SectionHeader from "@/app/components/ui/SectionHeader";
 import ComicCard from "@/app/components/ui/ComicCard";
 import ReviewForm from "./review-form";
+import { getWineDisplayName } from "@/lib/wine-labels";
 
 type PageProps = {
   params: Promise<{
@@ -222,10 +223,7 @@ const comment = String(formData.get("comment") ?? "");
       ? Number(existingRating.calculated_score).toFixed(2)
       : null;
 
-  const wineTitle =
-    wine.producer === wine.wine_name
-      ? wine.wine_name
-      : [wine.producer, wine.wine_name].filter(Boolean).join(" ");
+  const wineTitle = getWineDisplayName(wine);
 
   return (
     <div className="bg-white text-neutral-950">

@@ -7,6 +7,7 @@ import Section from "@/app/components/ui/Section";
 import SectionHeader from "@/app/components/ui/SectionHeader";
 import ComicCard from "@/app/components/ui/ComicCard";
 import WineImageUploadForm from "./wine-image-upload-form";
+import { getWineDisplayName } from "@/lib/wine-labels";
 
 export const dynamic = "force-dynamic";
 
@@ -70,10 +71,7 @@ export default async function WineImageUploadPage({ params }: PageProps) {
     redirect(`/wines/${wine.id}`);
   }
 
-  const wineLabel =
-    wine.producer === wine.wine_name
-      ? wine.wine_name
-      : [wine.producer, wine.wine_name].filter(Boolean).join(" ");
+  const wineLabel = getWineDisplayName(wine);
 
   return (
     <div className="bg-white text-neutral-950">
@@ -95,19 +93,19 @@ export default async function WineImageUploadPage({ params }: PageProps) {
           <div className="grid gap-4 text-sm leading-7 text-neutral-700 sm:grid-cols-2">
             <div>
               <div className="text-xs font-black uppercase tracking-[0.2em] text-neutral-500">
-                Erzeuger
+                Wein
               </div>
               <div className="mt-1 text-base font-semibold text-black">
-                {wine.producer}
+                {wine.wine_name}
               </div>
             </div>
 
             <div>
               <div className="text-xs font-black uppercase tracking-[0.2em] text-neutral-500">
-                Wein
+                Erzeuger
               </div>
               <div className="mt-1 text-base font-semibold text-black">
-                {wine.wine_name}
+                {wine.producer}
               </div>
             </div>
           </div>

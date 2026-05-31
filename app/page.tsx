@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { isPlaceholderWine } from "@/lib/public-wines";
+import { getWineDisplayName } from "@/lib/wine-labels";
 import HeroSplitSection from "@/app/components/ui/HeroSplitSection";
 import ComicButton from "@/app/components/ui/ComicButton";
 import Section from "@/app/components/ui/Section";
@@ -129,8 +130,7 @@ export default async function Page() {
 
     return {
   id: wine.id,
-  name: wine.wine_name,
-  producer: wine.producer,
+  name: getWineDisplayName(wine),
   year: wine.vintage,
   country: wine.country ?? "Unbekannt",
   score: average.toFixed(1),
@@ -144,7 +144,6 @@ export default async function Page() {
   id: wine.id,
   rank: index + 1,
   name: wine.name,
-  producer: wine.producer,
   year: wine.year,
   country: wine.country,
   score: wine.score,
@@ -154,10 +153,7 @@ export default async function Page() {
     date: new Date(t.tasting_date).toLocaleDateString("de-DE"),
     host: t.members?.display_name ?? "Unbekannt",
     wines: t.wines.filter((wine) => !isPlaceholderWine(wine)).map((w) => {
-      const name =
-        w.producer === w.wine_name
-          ? w.wine_name
-          : [w.producer, w.wine_name].filter(Boolean).join(" ");
+      const name = getWineDisplayName(w);
 
       return [name, w.vintage].filter(Boolean).join(" ");
     }),
@@ -294,10 +290,6 @@ export default async function Page() {
           <h3 className="text-3xl font-black uppercase leading-tight tracking-tight">
             {wine.name}
           </h3>
-
-          <p className="mt-4 text-base font-semibold text-neutral-600">
-            {wine.producer}
-          </p>
 
           <div className="mt-8 grid grid-cols-2 gap-3 text-sm uppercase tracking-widest text-neutral-600">
             <div>

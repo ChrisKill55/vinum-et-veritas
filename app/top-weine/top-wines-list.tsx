@@ -4,6 +4,7 @@ import { useState } from "react";
 import ComicCard from "@/app/components/ui/ComicCard";
 import WineGlassRating from "@/app/components/ui/WineGlassRating";
 import Link from "next/link";
+import { getWineDisplayName } from "@/lib/wine-labels";
 
 type TopWineItem = {
   id: number;
@@ -237,12 +238,7 @@ export default function TopWinesList({
 
       <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
         {wines.map((wine, index) => {
-          const wineLabel =
-            wine.producer &&
-            wine.wine_name &&
-            wine.producer === wine.wine_name
-              ? wine.wine_name
-              : [wine.producer, wine.wine_name].filter(Boolean).join(" ");
+          const wineLabel = getWineDisplayName(wine);
 
           return (
             <ComicCard

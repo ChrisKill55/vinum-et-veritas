@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { isPlaceholderWine } from "@/lib/public-wines";
+import { getWineDisplayName } from "@/lib/wine-labels";
 import WineGlassRating from "@/app/components/ui/WineGlassRating";
 import ComicCard from "@/app/components/ui/ComicCard";
 export const revalidate = 300;
@@ -143,12 +144,7 @@ export default async function TastingDetailPage({
                   wine.averageOverall !== null &&
                   wine.averageOverall === highestAverage;
 
-                const wineLabel =
-                  wine.producer &&
-                  wine.wine_name &&
-                  wine.producer === wine.wine_name
-                    ? wine.wine_name
-                    : [wine.producer, wine.wine_name].filter(Boolean).join(" ");
+                const wineLabel = getWineDisplayName(wine);
 
                 return (
                 <Link

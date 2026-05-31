@@ -7,6 +7,7 @@ import HeroSection from "@/app/components/ui/HeroSection";
 import Section from "@/app/components/ui/Section";
 import SectionHeader from "@/app/components/ui/SectionHeader";
 import ComicCard from "@/app/components/ui/ComicCard";
+import { getWineDisplayName } from "@/lib/wine-labels";
 
 type PageProps = {
   searchParams?: Promise<{
@@ -165,12 +166,7 @@ export default async function AdminWinesPage({ searchParams }: PageProps) {
 
         <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
           {wines.map((wine) => {
-            const wineLabel =
-              wine.producer &&
-              wine.wine_name &&
-              wine.producer === wine.wine_name
-                ? wine.wine_name
-                : [wine.producer, wine.wine_name].filter(Boolean).join(" ");
+            const wineLabel = getWineDisplayName(wine);
 
             const hostName =
               wine.tastings.members?.display_name ??

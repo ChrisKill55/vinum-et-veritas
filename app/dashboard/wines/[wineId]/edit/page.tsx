@@ -6,6 +6,7 @@ import HeroSection from "@/app/components/ui/HeroSection";
 import Section from "@/app/components/ui/Section";
 import SectionHeader from "@/app/components/ui/SectionHeader";
 import EditWineForm from "./edit-wine-form";
+import { getWineDisplayName } from "@/lib/wine-labels";
 
 export const dynamic = "force-dynamic";
 type PageProps = {
@@ -64,10 +65,7 @@ export default async function EditWinePage({ params }: PageProps) {
     notFound();
   }
 
-  const wineTitle =
-    wine.producer && wine.wine_name && wine.producer === wine.wine_name
-      ? wine.wine_name
-      : [wine.producer, wine.wine_name].filter(Boolean).join(" ");
+  const wineTitle = getWineDisplayName(wine);
 
   return (
     <div className="bg-white text-neutral-950">

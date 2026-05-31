@@ -4,6 +4,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { isPlaceholderWine } from "@/lib/public-wines";
+import { getWineDisplayName } from "@/lib/wine-labels";
 import HeroSection from "@/app/components/ui/HeroSection";
 import Section from "@/app/components/ui/Section";
 import SectionHeader from "@/app/components/ui/SectionHeader";
@@ -138,10 +139,7 @@ export default async function WineDetailPage({ params }: PageProps) {
 
   const primaryImage = wine.wine_images[0] ?? null;
 
-  const wineLabel =
-    wine.producer === wine.wine_name
-      ? wine.wine_name
-      : [wine.producer, wine.wine_name].filter(Boolean).join(" ");
+  const wineLabel = getWineDisplayName(wine);
 
   return (
     <div className="bg-white text-neutral-950">
@@ -193,19 +191,19 @@ export default async function WineDetailPage({ params }: PageProps) {
             <div className="mt-6 grid gap-4 text-sm leading-7 text-neutral-700 sm:grid-cols-2">
               <div>
                 <div className="text-xs font-black uppercase tracking-[0.2em] text-neutral-500">
-                  Erzeuger
+                  Wein
                 </div>
                 <div className="mt-1 text-base font-semibold text-black">
-                  {wine.producer}
+                  {wine.wine_name}
                 </div>
               </div>
 
               <div>
                 <div className="text-xs font-black uppercase tracking-[0.2em] text-neutral-500">
-                  Wein
+                  Erzeuger
                 </div>
                 <div className="mt-1 text-base font-semibold text-black">
-                  {wine.wine_name}
+                  {wine.producer}
                 </div>
               </div>
 

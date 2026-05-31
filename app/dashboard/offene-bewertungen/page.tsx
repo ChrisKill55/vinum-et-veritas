@@ -7,6 +7,7 @@ import HeroSection from "@/app/components/ui/HeroSection";
 import Section from "@/app/components/ui/Section";
 import SectionHeader from "@/app/components/ui/SectionHeader";
 import ComicCard from "@/app/components/ui/ComicCard";
+import { getWineDisplayName } from "@/lib/wine-labels";
 
 export const dynamic = "force-dynamic";
 
@@ -88,12 +89,7 @@ export default async function OffeneBewertungenPage() {
             {openRatings.map((rating) => {
               const wine = rating.wines;
 
-              const wineLabel =
-                wine.producer &&
-                wine.wine_name &&
-                wine.producer === wine.wine_name
-                  ? wine.wine_name
-                  : [wine.producer, wine.wine_name].filter(Boolean).join(" ");
+              const wineLabel = getWineDisplayName(wine);
 
               return (
                 <ComicCard
