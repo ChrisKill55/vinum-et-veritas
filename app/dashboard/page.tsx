@@ -163,6 +163,30 @@ export default async function DashboardPage() {
             </div>
           </ComicCard>
 
+          <ComicCard className="relative overflow-hidden px-6 pb-12 pt-6">
+            <div className="text-xs font-black uppercase tracking-[0.22em] text-red-700">
+              Konto
+            </div>
+
+            <h3 className="mt-3 text-2xl font-black uppercase leading-tight">
+              Zugangsdaten
+            </h3>
+
+            <p className="mt-5 text-sm leading-7 text-neutral-700">
+              Ändere dein persönliches Passwort für den internen
+              Mitgliederbereich.
+            </p>
+
+            <div className="mt-8">
+              <Link
+                href="/dashboard/account"
+                className="inline-flex border-2 border-black bg-white px-4 py-3 text-sm font-black uppercase tracking-[0.2em] text-black transition hover:-translate-y-0.5"
+              >
+                Passwort ändern
+              </Link>
+            </div>
+          </ComicCard>
+
           {isAdmin ? (
             <ComicCard className="relative overflow-hidden px-6 pb-12 pt-6">
               <div className="text-xs font-black uppercase tracking-[0.22em] text-red-700">
