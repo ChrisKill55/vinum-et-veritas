@@ -114,6 +114,13 @@ export default function DatenschutzPage() {
                   Grundlage von Art. 6 Abs. 1 lit. f DSGVO zur Verwaltung und
                   Absicherung der internen Clubfunktionen.
                 </p>
+                <p className="mt-4 text-base leading-8 text-neutral-700">
+                  Für die Absicherung des Logins können einmalige Login-Codes
+                  per E-Mail versendet werden. Hierfür werden die E-Mail-Adresse
+                  und der Inhalt der Login-Mail an einen Transaktionsmail-Dienst
+                  übermittelt, soweit dies für die Zustellung des Codes
+                  erforderlich ist.
+                </p>
               </section>
 
               <section className="border-t-2 border-black pt-8">
