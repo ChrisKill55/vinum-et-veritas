@@ -23,9 +23,27 @@ export default function DatenschutzPage() {
                 </h2>
                 <div className="mt-4 space-y-2 text-base leading-8 text-neutral-700">
                   <p>Christian Kill</p>
+                  <p>Heiko Heller</p>
+                  <p>Niels Jeß</p>
+                  <p>Stefan Nonnenmacher</p>
+                  <p>Thorsten Drewes</p>
+                  <p>Torsten Yanez</p>
                   <p>Quellenweg 26a</p>
                   <p>46539 Dinslaken</p>
-                  <p>E-Mail: news@christian-kill.de</p>
+                  <p>
+                    E-Mail:{" "}
+                    <a
+                      className="font-black text-red-700 underline decoration-2 underline-offset-4"
+                      href="mailto:news@christian-kill.de"
+                    >
+                      news@christian-kill.de
+                    </a>
+                  </p>
+                  <p>
+                    Die genannten Personen betreiben diese private Website
+                    gemeinsam. Als zentrale Kontaktanschrift wird die oben
+                    genannte Adresse verwendet.
+                  </p>
                 </div>
               </section>
 
@@ -64,7 +82,9 @@ export default function DatenschutzPage() {
                   bereitgestellt. IONOS ist nicht der technische Hoster der
                   Website-Inhalte, kann jedoch im Rahmen von Domain-, DNS- und
                   E-Mail-Diensten technische Daten verarbeiten. Die Verarbeitung
-                  erfolgt auf Grundlage von Art. 6 Abs. 1 lit. f DSGVO.
+                  erfolgt auf Grundlage von Art. 6 Abs. 1 lit. f DSGVO. Das
+                  berechtigte Interesse liegt in der Erreichbarkeit der Domain
+                  und der Kommunikationsadressen.
                 </p>
               </section>
 
@@ -116,10 +136,16 @@ export default function DatenschutzPage() {
                 </p>
                 <p className="mt-4 text-base leading-8 text-neutral-700">
                   Für die Absicherung des Logins können einmalige Login-Codes
-                  per E-Mail versendet werden. Hierfür werden die E-Mail-Adresse
-                  und der Inhalt der Login-Mail an einen Transaktionsmail-Dienst
-                  übermittelt, soweit dies für die Zustellung des Codes
-                  erforderlich ist.
+                  per E-Mail versendet werden. Hierfür wird der
+                  Transaktionsmail-Dienst Resend genutzt. Anbieter ist Plus Five
+                  Five, Inc., 2261 Market Street #5039, San Francisco, CA 94114,
+                  USA. Zur Zustellung des Login-Codes werden insbesondere die
+                  E-Mail-Adresse, der Inhalt der Login-Mail, technische
+                  Versanddaten und Zustellinformationen verarbeitet. Die
+                  Verarbeitung erfolgt, soweit sie für Anmeldung und
+                  Authentifizierung erforderlich ist, auf Grundlage von Art. 6
+                  Abs. 1 lit. b DSGVO sowie ergänzend auf Grundlage von Art. 6
+                  Abs. 1 lit. f DSGVO zur Absicherung des Logins.
                 </p>
               </section>
 
@@ -134,8 +160,8 @@ export default function DatenschutzPage() {
                   bereitzustellen. Solche technisch erforderlichen Cookies
                   dienen dem Betrieb der Website und werden nicht zu
                   Werbe- oder Trackingzwecken eingesetzt. Die Verarbeitung
-                  erfolgt auf Grundlage von § 25 Abs. 2 TTDSG beziehungsweise
-                  TDDDG sowie Art. 6 Abs. 1 lit. f DSGVO.
+                  erfolgt auf Grundlage von § 25 Abs. 2 TDDDG sowie Art. 6
+                  Abs. 1 lit. f DSGVO.
                 </p>
               </section>
 
@@ -190,15 +216,15 @@ export default function DatenschutzPage() {
                   10. Drittlandübermittlung
                 </h2>
                 <p className="mt-4 text-base leading-8 text-neutral-700">
-                  Bei der Nutzung von Vercel und Neon kann eine Verarbeitung
-                  personenbezogener Daten in den USA oder durch Anbieter mit
-                  Sitz in den USA erfolgen. Eine solche Verarbeitung erfolgt,
-                  soweit erforderlich, auf Grundlage geeigneter Garantien im
-                  Sinne der Art. 44 ff. DSGVO, insbesondere auf Grundlage von
-                  Standardvertragsklauseln der Europäischen Kommission und/oder
-                  auf Grundlage einer Zertifizierung nach dem EU-US Data Privacy
-                  Framework, soweit der jeweilige Anbieter entsprechend
-                  zertifiziert ist.
+                  Bei der Nutzung von Vercel, Neon und Resend kann eine
+                  Verarbeitung personenbezogener Daten in den USA oder durch
+                  Anbieter mit Sitz in den USA erfolgen. Eine solche Verarbeitung
+                  erfolgt, soweit erforderlich, auf Grundlage geeigneter
+                  Garantien im Sinne der Art. 44 ff. DSGVO, insbesondere auf
+                  Grundlage von Standardvertragsklauseln der Europäischen
+                  Kommission und/oder auf Grundlage einer Zertifizierung nach dem
+                  EU-US Data Privacy Framework, soweit der jeweilige Anbieter
+                  entsprechend zertifiziert ist.
                 </p>
               </section>
 
@@ -222,7 +248,15 @@ export default function DatenschutzPage() {
                 <p className="mt-4 text-base leading-8 text-neutral-700">
                   Personenbezogene Daten werden nur so lange gespeichert, wie
                   dies für den jeweiligen Zweck erforderlich ist oder gesetzliche
-                  Aufbewahrungspflichten bestehen.
+                  Aufbewahrungspflichten bestehen. Login-Codes sind nur
+                  kurzfristig gültig und werden nach Ablauf beziehungsweise nach
+                  erfolgreicher Nutzung nicht weiter für den Login verwendet.
+                  Sitzungsdaten werden für die Dauer der jeweiligen Anmeldung
+                  verarbeitet. Mitgliedskonten, Bewertungen, Tastingdaten und
+                  hochgeladene Bilder werden gespeichert, solange sie für den
+                  Betrieb des privaten Weinclubs erforderlich sind oder bis eine
+                  Löschung veranlasst wird, soweit keine entgegenstehenden
+                  Gründe bestehen.
                 </p>
               </section>
 
@@ -260,9 +294,10 @@ export default function DatenschutzPage() {
                   15. Stand
                 </h2>
                 <p className="mt-4 text-base leading-8 text-neutral-700">
-                  Diese Datenschutzerklärung gilt für den aktuellen Stand dieser
-                  Website. Bei technischen oder rechtlichen Änderungen kann eine
-                  Anpassung erforderlich werden.
+                  Stand: 22. August 2026. Diese Datenschutzerklärung gilt für
+                  den aktuellen Stand dieser Website. Bei technischen oder
+                  rechtlichen Änderungen kann eine Anpassung erforderlich
+                  werden.
                 </p>
               </section>
             </div>
