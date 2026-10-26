@@ -67,6 +67,8 @@ model login_rate_limits {
   locked_until DateTime? @db.Timestamp(6)
   reset_at     DateTime  @db.Timestamp(6)
   updated_at   DateTime  @default(now()) @db.Timestamp(6)
+
+  @@index([reset_at])
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
