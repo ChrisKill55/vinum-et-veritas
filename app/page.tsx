@@ -13,7 +13,9 @@ import SectionAlt from "@/app/components/ui/SectionAlt";
 import ComicGallerySection from "@/app/components/ui/ComicGallerySection";
 import Link from "next/link";
 
-export const revalidate = 300;
+// Keep automated availability checks from regenerating this database-backed
+// page every few minutes. Admin mutations invalidate the page explicitly.
+export const revalidate = 86400;
 export default async function Page() {
   const heroImage = "/images/hero-banner.webp";
 
