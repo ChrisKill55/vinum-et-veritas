@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { syncTastingParticipants } from "@/lib/tasting-ratings";
+import { revalidatePath } from "next/cache";
 
 type IncomingWine = {
   id?: number | null;
@@ -223,6 +224,11 @@ export async function PATCH(
       guestNames,
     });
 
+    revalidatePath("/");
+    revalidatePath("/tastings");
+    revalidatePath(`/tastings/${tastingId}`);
+    revalidatePath("/top-weine");
+
     return NextResponse.json({ ok: true });
   } catch (error) {
     console.error("Fehler beim Aktualisieren des Tastings:", error);
@@ -300,6 +306,11 @@ export async function DELETE(
         id: tastingId,
       },
     });
+
+    revalidatePath("/");
+    revalidatePath("/tastings");
+    revalidatePath(`/tastings/${tastingId}`);
+    revalidatePath("/top-weine");
 
     return NextResponse.json({ ok: true });
   } catch (error) {
