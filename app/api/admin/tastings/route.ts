@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { syncTastingParticipants } from "@/lib/tasting-ratings";
+import { revalidatePath } from "next/cache";
 
 type IncomingWine = {
   sequence_no: number;
@@ -167,6 +168,11 @@ export async function POST(request: Request) {
       memberIds: selectedMemberIds,
       guestNames,
     });
+
+    revalidatePath("/");
+    revalidatePath("/tastings");
+    revalidatePath(`/tastings/${tasting.id}`);
+    revalidatePath("/top-weine");
 
     return NextResponse.json({
       ok: true,
